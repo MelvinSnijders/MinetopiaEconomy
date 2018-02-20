@@ -2,6 +2,7 @@ package nl.themelvin.minetopiaeconomy.storage;
 
 import nl.themelvin.minetopiaeconomy.Main;
 import nl.themelvin.minetopiaeconomy.storage.database.MySQL;
+import nl.themelvin.minetopiaeconomy.storage.file.FileManager;
 import nl.themelvin.minetopiaeconomy.user.UserData;
 import nl.themelvin.minetopiaeconomy.user.UserDataCache;
 import nl.themelvin.minetopiaeconomy.utils.Logger;
@@ -25,7 +26,23 @@ public class DataManager {
     public static UserData loadData(UUID player, boolean cache) {
 
         if(Main.storageType == StorageType.FILE) {
-            // TODO file storage type
+            if(Main.dataFile.getString("players." + player) != null) {
+                // User has account, load from file
+                String name = Main.dataFile.getString("players." + player + ".username");
+                Double money = Main.dataFile.getDouble("players." + player + ".money");
+                UserData data = new UserData(player, name, money);
+                if(cache) {
+                    UserDataCache.getInstance().add(data);
+                }
+                return data;
+            } else {
+                // User doesn't have account, create new cache (if cache = true), saving wil occur on leave
+                UserData userData = new UserData(player, null, 0D);
+                if(cache) {
+                    UserDataCache.getInstance().add(userData);
+                }
+                return userData;
+            }
         }
 
         if(Main.storageType == StorageType.MYSQL) {
@@ -64,7 +81,14 @@ public class DataManager {
     public static void saveCachedData(UUID player) {
 
         if(Main.storageType == StorageType.FILE) {
-            // TODO file storage type
+            try {
+                UserData cachedData = UserDataCache.getInstance().get(player);
+                Main.dataFile.set("players." + player + ".username", cachedData.name);
+                Main.dataFile.set("players." + player + ".money", cachedData.money);
+                FileManager.saveFile(Main.dataFile);
+            } catch(Exception e) {
+                Logger.consoleOutput(Logger.InfoLevel.ERROR, "Er ging iets fout tijdens het opslaan van de data voor " + player.toString());
+            }
         }
 
         if(Main.storageType == StorageType.MYSQL) {

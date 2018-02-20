@@ -17,15 +17,17 @@ public class FileManager {
             Main.getPlugin().getDataFolder().mkdir();
         }
 
-        File file = new File(Main.getPlugin().getDataFolder() + directory, fileName);
+        File file = new File(Main.getPlugin().getDataFolder() + "/" + directory, fileName);
 
         if(file.exists()) {
             return YamlConfiguration.loadConfiguration(file);
         } else {
             try {
+                file.mkdirs();
                 file.createNewFile();
             } catch (IOException e) {
                 Logger.consoleOutput(Logger.InfoLevel.ERROR, "Er ging iets fout bij het aanmaken van het bestand " + fileName + ", plugin uitgeschakeld!");
+                e.printStackTrace();
                 Bukkit.getPluginManager().disablePlugin(Main.getPlugin());
                 return null;
             }

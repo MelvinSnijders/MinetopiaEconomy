@@ -92,13 +92,6 @@ public class Main extends JavaPlugin {
                 Logger.consoleOutput(Logger.InfoLevel.WARNING, "Reload gedetecteerd, probeer je server zo min mogelijk te reloaden!");
             }
 
-            // Loading data for all online players (when server is reloaded)
-            for(Player on : Bukkit.getOnlinePlayers()) {
-                DataManager.loadData(on.getUniqueId(), true);
-                UserDataCache.getInstance().get(on.getUniqueId()).name = on.getName();
-                Logger.consoleOutput(Logger.InfoLevel.INFO, "Data geladen voor " + on.getName() + " (" + on.getUniqueId() + ")");
-            }
-
         }
 
         messageFile = FileManager.loadFile("", "messages.yml");
@@ -108,10 +101,18 @@ public class Main extends JavaPlugin {
             if(dataFile == null) {
                 return;
             }
+            Logger.consoleOutput(Logger.InfoLevel.INFO, "Het data bestand is aangemaakt.");
         }
 
         if(messageFile == null) {
             return;
+        }
+
+        // Loading data for all online players (when server is reloaded)
+        for(Player on : Bukkit.getOnlinePlayers()) {
+            DataManager.loadData(on.getUniqueId(), true);
+            UserDataCache.getInstance().get(on.getUniqueId()).name = on.getName();
+            Logger.consoleOutput(Logger.InfoLevel.INFO, "Data geladen voor " + on.getName() + " (" + on.getUniqueId() + ")");
         }
 
         Logger.consoleOutput(Logger.InfoLevel.INFO, "In Vault hooken...");
