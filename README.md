@@ -1,3 +1,5 @@
+## THIS PLUGIN ISN'T FINISHED YET!
+
 # MinetopiaEconomy
 A MySQL based Economy plugin for Minetopia servers.
 

@@ -63,7 +63,7 @@ public class Main extends JavaPlugin {
         }
 
         // Overriding Essentials Economy and registering this plugin as Economy plugin
-        Bukkit.getServicesManager().register(Economy.class, new EconomyHandler(this), new Vault(), ServicePriority.Highest);
+        Bukkit.getServicesManager().register(Economy.class, new EconomyHandler(this), Bukkit.getPluginManager().getPlugin("Vault"), ServicePriority.Highest);
 
     }
 
