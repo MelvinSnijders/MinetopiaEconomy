@@ -5,6 +5,6 @@ package nl.themelvin.minetopiaeconomy.storage;
  */
 public enum StorageType {
 
-    FILE, MYSQL;
+    FILE, MYSQL
 
 }

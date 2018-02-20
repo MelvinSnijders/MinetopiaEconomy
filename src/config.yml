@@ -19,9 +19,9 @@
 # Het type opslag dat je wilt gebruiken, kies uit 'file' of 'mysql'. Weet je niet wat dit is? Laat het zo staan!
 storage: file
 
-# De gegevens van je database, enkel nodig als je bij de vorige optie 'mysql' hebt ingevuld
+# De gegevens van je database, enkel nodig als je bij de vorige optie 'mysql' hebt ingevuld. Kies de juiste database, deze wordt niet aangemaakt!
 database:
   host: 127.0.0.1
-  database: minetopiaeconomy # Kies de juiste database, deze wordt NIET standaard aangemaakt
+  database: minetopiaeconomy
   username: admin
   password: password

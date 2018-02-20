@@ -11,7 +11,7 @@ public class UserDataCache {
 
     private static UserDataCache instance;
 
-    private HashMap<UUID, UserData> dataCache = new HashMap<>();
+    public HashMap<UUID, UserData> dataCache = new HashMap<>();
 
     /**
      * Get instance of the class, creates new when none exists
@@ -29,16 +29,18 @@ public class UserDataCache {
      * @param uuid The UUID of the player to get data from
      * @return UserData Object
      */
-    public UserData get(UUID uuid) {
-        return dataCache.get(uuid);
-    }
+    public UserData get(UUID uuid) { return dataCache.get(uuid); }
 
     /**
      * Remove UserData from cache
      * @param uuid The UUID of the player to remove data from
      */
-    public void remove(UUID uuid) {
-        dataCache.remove(uuid);
-    }
+    public void remove(UUID uuid) { dataCache.remove(uuid); }
+
+    /**
+     * Add UserData to cache
+     * @param userData The UserData to add
+     */
+    public void add(UserData userData) { dataCache.put(userData.uuid, userData); }
 
 }

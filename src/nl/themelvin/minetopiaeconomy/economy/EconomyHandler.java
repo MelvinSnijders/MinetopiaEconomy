@@ -2,6 +2,10 @@ package nl.themelvin.minetopiaeconomy.economy;
 
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
+import nl.themelvin.minetopiaeconomy.storage.DataManager;
+import nl.themelvin.minetopiaeconomy.user.UserData;
+import nl.themelvin.minetopiaeconomy.user.UserDataCache;
+import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.plugin.Plugin;
 
@@ -107,6 +111,14 @@ public class EconomyHandler implements Economy {
      */
     @Override
     public boolean hasAccount(OfflinePlayer player) {
+        if(Bukkit.getPlayer(player.getName()) != null) {
+            // Player is online, so has account
+            return true;
+        } else {
+            if(player.hasPlayedBefore()) {
+                return true;
+            }
+        }
         return false;
     }
 
@@ -128,7 +140,7 @@ public class EconomyHandler implements Economy {
      */
     @Override
     public boolean hasAccount(OfflinePlayer player, String worldName) {
-        return false;
+        return hasAccount(player);
     }
 
     /**
@@ -146,7 +158,14 @@ public class EconomyHandler implements Economy {
      */
     @Override
     public double getBalance(OfflinePlayer player) {
-        return 0;
+
+        if(Bukkit.getPlayer(player.getName()) != null) {
+            // Player is online, read balance from cache
+            return UserDataCache.getInstance().get(player.getUniqueId()).money;
+        } else {
+            return DataManager.loadData(player.getUniqueId(), false).money;
+        }
+
     }
 
     /**
@@ -167,7 +186,7 @@ public class EconomyHandler implements Economy {
      */
     @Override
     public double getBalance(OfflinePlayer player, String world) {
-        return 0;
+        return getBalance(player);
     }
 
     /**
@@ -181,14 +200,13 @@ public class EconomyHandler implements Economy {
 
     /**
      * Checks if the player account has the amount - DO NOT USE NEGATIVE AMOUNTS
-     *
      * @param player to check
      * @param amount to check for
      * @return True if <b>player</b> has <b>amount</b>, False else wise
      */
     @Override
     public boolean has(OfflinePlayer player, double amount) {
-        return false;
+        return getBalance(player) >= amount;
     }
 
     /**
@@ -210,7 +228,7 @@ public class EconomyHandler implements Economy {
      */
     @Override
     public boolean has(OfflinePlayer player, String worldName, double amount) {
-        return false;
+        return has(player, amount);
     }
 
     /**
@@ -230,7 +248,26 @@ public class EconomyHandler implements Economy {
      */
     @Override
     public EconomyResponse withdrawPlayer(OfflinePlayer player, double amount) {
-        return null;
+        if(amount < 0) {
+            return new EconomyResponse(0, 0, EconomyResponse.ResponseType.FAILURE, "Je kan geen negatieve bedragen afnemen.");
+        }
+
+        UserData data;
+
+        if(Bukkit.getPlayer(player.getName()) != null) {
+            // Player is online
+            data = UserDataCache.getInstance().get(player.getUniqueId());
+        } else {
+            // Player is offline
+            data = DataManager.loadData(player.getUniqueId(), false);
+        }
+
+        if(data.money >= amount) {
+            data.money -= amount;
+            return new EconomyResponse(amount, data.money, EconomyResponse.ResponseType.SUCCESS, "");
+        } else {
+            return new EconomyResponse(0, data.money, EconomyResponse.ResponseType.FAILURE, "Speler heeft niet genoeg geld.");
+        }
     }
 
     /**
@@ -272,7 +309,22 @@ public class EconomyHandler implements Economy {
      */
     @Override
     public EconomyResponse depositPlayer(OfflinePlayer player, double amount) {
-        return null;
+        if(amount < 0) {
+            return new EconomyResponse(0, 0, EconomyResponse.ResponseType.FAILURE, "Je kan geen negatieve bedragen toevoegen.");
+        }
+
+        UserData data;
+
+        if(Bukkit.getPlayer(player.getName()) != null) {
+            // Player is online
+            data = UserDataCache.getInstance().get(player.getUniqueId());
+        } else {
+            // Player is offline
+            data = DataManager.loadData(player.getUniqueId(), false);
+        }
+
+        data.money += amount;
+        return new EconomyResponse(amount, data.money, EconomyResponse.ResponseType.SUCCESS, "");
     }
 
     /**
@@ -294,49 +346,49 @@ public class EconomyHandler implements Economy {
      */
     @Override
     public EconomyResponse depositPlayer(OfflinePlayer player, String worldName, double amount) {
-        return null;
+        return depositPlayer(player, amount);
     }
 
     // Not used in this Economy plugin
     @Override
     public EconomyResponse createBank(String s, String s1) {
-        return null;
+        return new EconomyResponse( 0, 0, EconomyResponse.ResponseType.NOT_IMPLEMENTED, "MinetopiaEconomy support geen banken.");
     }
 
     // Not used in this Economy plugin
     @Override
     public EconomyResponse createBank(String s, OfflinePlayer offlinePlayer) {
-        return null;
+        return new EconomyResponse( 0, 0, EconomyResponse.ResponseType.NOT_IMPLEMENTED, "MinetopiaEconomy support geen banken.");
     }
 
     // Not used in this Economy plugin
     @Override
     public EconomyResponse deleteBank(String s) {
-        return null;
+        return new EconomyResponse( 0, 0, EconomyResponse.ResponseType.NOT_IMPLEMENTED, "MinetopiaEconomy support geen banken.");
     }
 
     // Not used in this Economy plugin
     @Override
     public EconomyResponse bankBalance(String s) {
-        return null;
+        return new EconomyResponse( 0, 0, EconomyResponse.ResponseType.NOT_IMPLEMENTED, "MinetopiaEconomy support geen banken.");
     }
 
     // Not used in this Economy plugin
     @Override
     public EconomyResponse bankHas(String s, double v) {
-        return null;
+        return new EconomyResponse( 0, 0, EconomyResponse.ResponseType.NOT_IMPLEMENTED, "MinetopiaEconomy support geen banken.");
     }
 
     // Not used in this Economy plugin
     @Override
     public EconomyResponse bankWithdraw(String s, double v) {
-        return null;
+        return new EconomyResponse( 0, 0, EconomyResponse.ResponseType.NOT_IMPLEMENTED, "MinetopiaEconomy support geen banken.");
     }
 
     // Not used in this Economy plugin
     @Override
     public EconomyResponse bankDeposit(String s, double v) {
-        return null;
+        return new EconomyResponse( 0, 0, EconomyResponse.ResponseType.NOT_IMPLEMENTED, "MinetopiaEconomy support geen banken.");
     }
 
     // Not used in this Economy plugin
@@ -348,19 +400,19 @@ public class EconomyHandler implements Economy {
     // Not used in this Economy plugin
     @Override
     public EconomyResponse isBankOwner(String s, OfflinePlayer offlinePlayer) {
-        return null;
+        return new EconomyResponse( 0, 0, EconomyResponse.ResponseType.NOT_IMPLEMENTED, "MinetopiaEconomy support geen banken.");
     }
 
     // Not used in this Economy plugin
     @Override
     public EconomyResponse isBankMember(String s, String s1) {
-        return null;
+        return new EconomyResponse( 0, 0, EconomyResponse.ResponseType.NOT_IMPLEMENTED, "MinetopiaEconomy support geen banken.");
     }
 
     // Not used in this Economy plugin
     @Override
     public EconomyResponse isBankMember(String s, OfflinePlayer offlinePlayer) {
-        return null;
+        return new EconomyResponse( 0, 0, EconomyResponse.ResponseType.NOT_IMPLEMENTED, "MinetopiaEconomy support geen banken.");
     }
 
     // Not used in this Economy plugin
@@ -385,7 +437,7 @@ public class EconomyHandler implements Economy {
      */
     @Override
     public boolean createPlayerAccount(OfflinePlayer player) {
-        return false;
+        return true;
     }
 
     /**

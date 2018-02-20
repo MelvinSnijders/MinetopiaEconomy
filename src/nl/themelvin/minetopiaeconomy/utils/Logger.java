@@ -36,16 +36,16 @@ public class Logger {
         String prefix = "";
         switch (infoLevel) {
             case INFO:
-                prefix = "&a[Info] ";
+                prefix = "&a[MinetopiaEconomy Info] ";
                 break;
             case WARNING:
-                prefix = "&6[Warning] ";
+                prefix = "&e[MinetopiaEconomy Warning] ";
                 break;
             case ERROR:
-                prefix = "&c[Error] ";
+                prefix = "&c[MinetopiaEconomy Error] ";
                 break;
             case DEBUG:
-                prefix = "&b[Debug] ";
+                prefix = "&b[MinetopiaEconomyDebug] ";
                 break;
         }
         Bukkit.getConsoleSender().sendMessage(colorFormat(prefix + "&f" + message));

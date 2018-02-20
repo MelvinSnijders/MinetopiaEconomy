@@ -28,7 +28,7 @@ public class MySQL {
         try {
             Class.forName("com.mysql.jdbc.Driver");
             if (connection == null) {
-                connection = DriverManager.getConnection("jdbc:mysql://" + hostname + "/" + database, username, password);
+                connection = DriverManager.getConnection("jdbc:mysql://" + hostname + "/" + database + "?useSSL=false", username, password);
             }
             return connection;
         } catch (ClassNotFoundException exception) {
