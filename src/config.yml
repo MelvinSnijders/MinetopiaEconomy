@@ -1,0 +1,27 @@
+###############################################################################################
+#    __  __ _            _              _       ______                                        #
+#   |  \/  (_)          | |            (_)     |  ____|                                       #
+#   | \  / |_ _ __   ___| |_ ___  _ __  _  __ _| |__   ___ ___  _ __   ___  _ __ ___  _   _   #
+#   | |\/| | | '_ \ / _ \ __/ _ \| '_ \| |/ _` |  __| / __/ _ \| '_ \ / _ \| '_ ` _ \| | | |  #
+#   | |  | | | | | |  __/ || (_) | |_) | | (_| | |___| (_| (_) | | | | (_) | | | | | | |_| |  #
+#   |_|  |_|_|_| |_|\___|\__\___/| .__/|_|\__,_|______\___\___/|_| |_|\___/|_| |_| |_|\__, |  #
+#                                | |                                                   __/ |  #
+#                                |_|                                                  |___/   #
+#                                                                                             #
+#       De gratis Economy plugin voor jouw Minetopia server - Gemaakt door TheMelvinNL        #
+#                                                                                             #
+###############################################################################################
+
+# Welkom in het configuratiebestand van MinetopiaEconomy
+# Bij elke config optie staat een kleine uitleg om het wat makkelijker te maken
+# Deze plugin is helemaal gratis, wil je toch wat voor me doen? Doneer via https://paypal.me/melvinsnijders
+
+# Het type opslag dat je wilt gebruiken, kies uit 'file' of 'mysql'. Weet je niet wat dit is? Laat het zo staan!
+storage: file
+
+# De gegevens van je database, enkel nodig als je bij de vorige optie 'mysql' hebt ingevuld
+database:
+  host: 127.0.0.1
+  database: minetopiaeconomy # Kies de juiste database, deze wordt NIET standaard aangemaakt
+  username: admin
+  password: password
