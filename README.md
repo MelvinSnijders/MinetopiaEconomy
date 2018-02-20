@@ -4,7 +4,7 @@ A MySQL based Economy plugin for Minetopia servers.
 ## Installatie
 TODO
 
-##License
+## License
 MIT License
 
 Copyright (c) 2018 Melvin Snijders and Contributors
