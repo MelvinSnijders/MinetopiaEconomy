@@ -27,9 +27,7 @@ public class DefaultPlayerListener implements Listener {
 
     @EventHandler
     public void onLeave(PlayerQuitEvent e) {
-
         Bukkit.getScheduler().runTaskAsynchronously(Main.getPlugin(), () ->  DataManager.saveCachedData(e.getPlayer().getUniqueId()));
-
     }
 
 }

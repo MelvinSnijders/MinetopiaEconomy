@@ -1,12 +1,25 @@
 package nl.themelvin.minetopiaeconomy.utils;
 
+import nl.themelvin.minetopiaeconomy.user.UserDataCache;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
+
+import java.text.NumberFormat;
+import java.util.Locale;
 
 /**
  * Utility to sendMessages and formats
  */
 public class Logger {
+
+    public static String placeholderFormat(String message, Player p) {
+        String msg = message;
+        msg = msg.replaceAll("%balance%", NumberFormat.getNumberInstance(Locale.GERMAN).format(UserDataCache.getInstance().get(p.getUniqueId()).money.intValue()));
+        msg = msg.replaceAll("%username%", p.getName());
+        msg = ChatColor.translateAlternateColorCodes('&', msg);
+        return msg;
+    }
 
     /**
      * Format a String with color codes

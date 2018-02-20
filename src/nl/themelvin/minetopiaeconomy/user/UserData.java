@@ -10,9 +10,9 @@ public class UserData {
 
     public UUID uuid;
     public String name;
-    public double money;
+    public Double money;
 
-    public UserData(UUID uuid, String name, double money) {
+    public UserData(UUID uuid, String name, Double money) {
         this.uuid = uuid;
         this.name = name;
         this.money = money;

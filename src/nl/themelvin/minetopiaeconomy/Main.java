@@ -2,6 +2,7 @@ package nl.themelvin.minetopiaeconomy;
 
 import net.milkbowl.vault.Vault;
 import net.milkbowl.vault.economy.Economy;
+import nl.themelvin.minetopiaeconomy.commands.CmdMoney;
 import nl.themelvin.minetopiaeconomy.economy.EconomyHandler;
 import nl.themelvin.minetopiaeconomy.listeners.DefaultPlayerListener;
 import nl.themelvin.minetopiaeconomy.storage.DataManager;
@@ -27,8 +28,8 @@ public class Main extends JavaPlugin {
 
     public static StorageType storageType;
 
-    public static FileConfiguration dataFile;
-    public static FileConfiguration messageFile;
+    public static FileManager dataFile;
+    public static FileManager messageFile;
 
     @Override
     public void onEnable() {
@@ -94,19 +95,26 @@ public class Main extends JavaPlugin {
 
         }
 
-        messageFile = FileManager.loadFile("", "messages.yml");
+        messageFile = new FileManager("", "messages.yml");
 
         if(storageType == StorageType.FILE) {
-            dataFile = FileManager.loadFile("data", "userdata.yml");
-            if(dataFile == null) {
+            dataFile = new FileManager("/data", "userdata.yml");
+            if(dataFile.loadFile() == null) {
                 return;
             }
             Logger.consoleOutput(Logger.InfoLevel.INFO, "Het data bestand is aangemaakt.");
         }
 
-        if(messageFile == null) {
+        if(messageFile.loadFile() == null) {
             return;
         }
+
+        messageFile.getData().addDefault("money-cmd", "&eJe hebt op dit moment &6€%balance% &eop je rekening.");
+        messageFile.getData().addDefault("money-cmd-other", "&eDe speler &6%targetname% &eheeft op dit moment &6€%targetbalance% &eop zijn of haar rekening.");
+        messageFile.getData().addDefault("baltop-calculate", "&eHet zoeken van de hoogste bedragen kost tijd, even geduld...");
+        messageFile.getData().addDefault("baltop-resultcolor", "&6");
+        messageFile.getData().options().copyDefaults(true);
+        messageFile.saveFile();
 
         // Loading data for all online players (when server is reloaded)
         for(Player on : Bukkit.getOnlinePlayers()) {
@@ -121,6 +129,8 @@ public class Main extends JavaPlugin {
         Bukkit.getServicesManager().register(Economy.class, new EconomyHandler(this), Bukkit.getPluginManager().getPlugin("Vault"), ServicePriority.Highest);
 
         Logger.consoleOutput(Logger.InfoLevel.INFO, "Succesvol geregistreerd in Vault plugin.");
+
+        getCommand("money").setExecutor(new CmdMoney());
 
         Logger.consoleOutput(Logger.InfoLevel.INFO, "De MinetopiaEconomy plugin is ingeschakeld! Het duurde " + (System.currentTimeMillis() - startMillis) + "ms. Gemaakt door TheMelvinNL");
 

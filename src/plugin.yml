@@ -4,3 +4,7 @@ version: 1.0-SNAPSHOT
 main: nl.themelvin.minetopiaeconomy.Main
 softdepend: [Vault]
 commands:
+  money:
+    aliases: [geld, €]
+  balancetop:
+    aliases: [baltop, moneytop, geldtop]

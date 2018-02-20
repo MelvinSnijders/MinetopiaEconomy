@@ -26,10 +26,10 @@ public class DataManager {
     public static UserData loadData(UUID player, boolean cache) {
 
         if(Main.storageType == StorageType.FILE) {
-            if(Main.dataFile.getString("players." + player) != null) {
+            if(Main.dataFile.getData().getString("players." + player) != null) {
                 // User has account, load from file
-                String name = Main.dataFile.getString("players." + player + ".username");
-                Double money = Main.dataFile.getDouble("players." + player + ".money");
+                String name = Main.dataFile.getData().getString("players." + player + ".username");
+                Double money = Main.dataFile.getData().getDouble("players." + player + ".money");
                 UserData data = new UserData(player, name, money);
                 if(cache) {
                     UserDataCache.getInstance().add(data);
@@ -83,9 +83,9 @@ public class DataManager {
         if(Main.storageType == StorageType.FILE) {
             try {
                 UserData cachedData = UserDataCache.getInstance().get(player);
-                Main.dataFile.set("players." + player + ".username", cachedData.name);
-                Main.dataFile.set("players." + player + ".money", cachedData.money);
-                FileManager.saveFile(Main.dataFile);
+                Main.dataFile.getData().set("players." + player + ".username", cachedData.name);
+                Main.dataFile.getData().set("players." + player + ".money", cachedData.money);
+                Main.dataFile.saveFile();
             } catch(Exception e) {
                 Logger.consoleOutput(Logger.InfoLevel.ERROR, "Er ging iets fout tijdens het opslaan van de data voor " + player.toString());
             }
