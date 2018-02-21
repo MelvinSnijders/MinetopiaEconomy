@@ -8,3 +8,5 @@ commands:
     aliases: [geld, €]
   balancetop:
     aliases: [baltop, moneytop, geldtop]
+  economy:
+    aliases: [eco, economie]

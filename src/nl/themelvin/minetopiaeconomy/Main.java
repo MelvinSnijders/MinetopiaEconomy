@@ -2,6 +2,8 @@ package nl.themelvin.minetopiaeconomy;
 
 import net.milkbowl.vault.Vault;
 import net.milkbowl.vault.economy.Economy;
+import nl.themelvin.minetopiaeconomy.commands.CmdBalanceTop;
+import nl.themelvin.minetopiaeconomy.commands.CmdEconomy;
 import nl.themelvin.minetopiaeconomy.commands.CmdMoney;
 import nl.themelvin.minetopiaeconomy.economy.EconomyHandler;
 import nl.themelvin.minetopiaeconomy.listeners.DefaultPlayerListener;
@@ -112,7 +114,13 @@ public class Main extends JavaPlugin {
         messageFile.getData().addDefault("money-cmd", "&eJe hebt op dit moment &6€%balance% &eop je rekening.");
         messageFile.getData().addDefault("money-cmd-other", "&eDe speler &6%targetname% &eheeft op dit moment &6€%targetbalance% &eop zijn of haar rekening.");
         messageFile.getData().addDefault("baltop-calculate", "&eHet zoeken van de hoogste bedragen kost tijd, even geduld...");
-        messageFile.getData().addDefault("baltop-resultcolor", "&6");
+        messageFile.getData().addDefault("baltop-result", "&e%number%. &6%resultname% (€%resultmoney%)");
+        messageFile.getData().addDefault("eco-use", "&eGebruik &6/%cmd% <give/take/set/reset> <speler> (<aantal>)&e.");
+        messageFile.getData().addDefault("eco-give", "&eJe hebt &6%targetname% &eeen bedrag van &6€%money% &egegeven.");
+        messageFile.getData().addDefault("eco-take", "&eJe hebt van &6%targetname% &eeen bedrag van &6€%money% &eafgenomen.");
+        messageFile.getData().addDefault("eco-set", "&eJe hebt het geld van &6%targetname% &enaar &6€%money% &egezet.");
+        messageFile.getData().addDefault("eco-reset", "&eJe hebt het geld van &6%targetname% &eteruggezet naar &6€0&e.");
+        messageFile.getData().addDefault("eco-nodata", "&eVan deze speler is geen data gevonden.");
         messageFile.getData().options().copyDefaults(true);
         messageFile.saveFile();
 
@@ -131,6 +139,8 @@ public class Main extends JavaPlugin {
         Logger.consoleOutput(Logger.InfoLevel.INFO, "Succesvol geregistreerd in Vault plugin.");
 
         getCommand("money").setExecutor(new CmdMoney());
+        getCommand("balancetop").setExecutor(new CmdBalanceTop());
+        getCommand("economy").setExecutor(new CmdEconomy());
 
         Logger.consoleOutput(Logger.InfoLevel.INFO, "De MinetopiaEconomy plugin is ingeschakeld! Het duurde " + (System.currentTimeMillis() - startMillis) + "ms. Gemaakt door TheMelvinNL");
 

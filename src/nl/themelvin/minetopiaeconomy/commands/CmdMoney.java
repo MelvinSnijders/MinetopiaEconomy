@@ -29,42 +29,45 @@ public class CmdMoney implements CommandExecutor {
 
                 if (p.hasPermission("minetopiaeconomy.balance")) {
 
-                    String target = args[0];
-                    Double money = 0D;
-                    String realTargetName = target;
+                    Bukkit.getScheduler().runTaskAsynchronously(Main.getPlugin(), () -> {
 
-                    if(Bukkit.getPlayer(target) != null) {
-                        realTargetName = Bukkit.getPlayer(target).getName();
-                        money = UserDataCache.getInstance().get(Bukkit.getPlayer(target).getUniqueId()).money;
+                        String target = args[0];
+                        Double money = 0D;
+                        String realTargetName = target;
+
+                        if(Bukkit.getPlayer(target) != null) {
+                            realTargetName = Bukkit.getPlayer(target).getName();
+                            money = UserDataCache.getInstance().get(Bukkit.getPlayer(target).getUniqueId()).money;
+                            p.sendMessage(Logger.placeholderFormat(Main.messageFile.getData().getString("money-cmd-other"), p).replaceAll("%targetname%", realTargetName).replaceAll("%targetbalance%", NumberFormat.getNumberInstance(Locale.GERMAN).format(money)));
+                            return;
+                        }
+
+                        if (Main.storageType == StorageType.FILE) {
+                            for(String key : Main.dataFile.getData().getConfigurationSection("players").getKeys(false)) {
+                                if(Main.dataFile.getData().getString("players." + key + ".username").equalsIgnoreCase(target)) {
+                                    money =  Main.dataFile.getData().getDouble("players." + key + ".money");
+                                    realTargetName = Main.dataFile.getData().getString("players." + key + ".username");
+                                }
+                            }
+                        }
+
+                        if (Main.storageType == StorageType.MYSQL) {
+                            try {
+                                PreparedStatement pst = MySQL.getConnection().prepareStatement("SELECT * FROM `UserData` WHERE lower(`username`) = ?");
+                                pst.setString(1, target.toLowerCase());
+                                ResultSet res = pst.executeQuery();
+                                if (res.next()) {
+                                    money = res.getDouble("money");
+                                    realTargetName = res.getString("username");
+                                }
+                            } catch (SQLException e) {
+                                money = 0D;
+                            }
+                            MySQL.close();
+                        }
+
                         p.sendMessage(Logger.placeholderFormat(Main.messageFile.getData().getString("money-cmd-other"), p).replaceAll("%targetname%", realTargetName).replaceAll("%targetbalance%", NumberFormat.getNumberInstance(Locale.GERMAN).format(money)));
-                        return true;
-                    }
-
-                    if (Main.storageType == StorageType.FILE) {
-                        for(String key : Main.dataFile.getData().getConfigurationSection("players").getKeys(false)) {
-                            if(Main.dataFile.getData().getString("players." + key + ".username").equalsIgnoreCase(target)) {
-                                money =  Main.dataFile.getData().getDouble("players." + key + ".money");
-                                realTargetName = Main.dataFile.getData().getString("players." + key + ".username");
-                            }
-                        }
-                    }
-
-                    if (Main.storageType == StorageType.MYSQL) {
-                        try {
-                            PreparedStatement pst = MySQL.getConnection().prepareStatement("SELECT * FROM `UserData` WHERE lower(`username`) = ?");
-                            pst.setString(1, target.toLowerCase());
-                            ResultSet res = pst.executeQuery();
-                            if (res.next()) {
-                                money = res.getDouble("money");
-                                realTargetName = res.getString("username");
-                            }
-                        } catch (SQLException e) {
-                            money = 0D;
-                        }
-                        MySQL.close();
-                    }
-
-                    p.sendMessage(Logger.placeholderFormat(Main.messageFile.getData().getString("money-cmd-other"), p).replaceAll("%targetname%", realTargetName).replaceAll("%targetbalance%", NumberFormat.getNumberInstance(Locale.GERMAN).format(money)));
+                    });
 
                 } else {
                     p.sendMessage(Logger.placeholderFormat(Main.messageFile.getData().getString("money-cmd"), p));
