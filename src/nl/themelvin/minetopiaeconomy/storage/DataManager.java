@@ -37,6 +37,7 @@ public class DataManager {
             } catch(SQLException e) {
                 Logger.consoleOutput(Logger.InfoLevel.ERROR, "Er ging iets fout tijdens het laden van de data voor " + uuid.toString());
             }
+            MySQL.close();
         }
 
         return false;
@@ -96,6 +97,7 @@ public class DataManager {
             } catch (SQLException e) {
                 Logger.consoleOutput(Logger.InfoLevel.ERROR, "Er ging iets fout tijdens het laden van de data voor " + player.toString());
             }
+            MySQL.close();
         }
         return null;
     }
@@ -146,6 +148,7 @@ public class DataManager {
             } catch (SQLException e) {
                 Logger.consoleOutput(Logger.InfoLevel.ERROR, "Er ging iets fout tijdens het opslaan van de data voor " + player.toString());
             }
+            MySQL.close();
         }
 
     }
