@@ -2,20 +2,39 @@ package nl.themelvin.minetopiaeconomy.listeners;
 
 import nl.themelvin.minetopiaeconomy.Main;
 import nl.themelvin.minetopiaeconomy.storage.DataManager;
+import nl.themelvin.minetopiaeconomy.user.UserData;
 import nl.themelvin.minetopiaeconomy.user.UserDataCache;
 import nl.themelvin.minetopiaeconomy.utils.Logger;
 import org.bukkit.Bukkit;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.*;
 
+import java.io.File;
+
 public class DefaultPlayerListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onLogin(AsyncPlayerPreLoginEvent e) {
-        DataManager.loadData(e.getUniqueId(), true);
+        // Restore old data if player has old data from Essentials
+        if (!DataManager.hasJoinedBefore(e.getUniqueId())) {
+            File file = new File("plugins/Essentials/userdata", e.getUniqueId().toString() + ".yml");
+            if(file.exists()) {
+                FileConfiguration fc = YamlConfiguration.loadConfiguration(file);
+                if(fc.getString("money") != null) {
+                    Double oldMoney = Double.valueOf(fc.getString("money"));
+                    UserData userData = new UserData(e.getUniqueId(), null, oldMoney);
+                    UserDataCache.getInstance().add(userData);
+                    Logger.consoleOutput(Logger.InfoLevel.INFO, "Oude data hersteld voor " + e.getUniqueId().toString());
+                }
+            }
+        } else {
+            DataManager.loadData(e.getUniqueId(), true);
+        }
     }
 
     @EventHandler
