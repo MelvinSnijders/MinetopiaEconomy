@@ -7,6 +7,7 @@ import nl.themelvin.minetopiaeconomy.user.UserData;
 import nl.themelvin.minetopiaeconomy.user.UserDataCache;
 import nl.themelvin.minetopiaeconomy.utils.Logger;
 
+import java.io.File;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -17,43 +18,68 @@ import java.util.UUID;
  */
 public class DataManager {
 
-    /**
-     * Reads UserData from database or file storage
-     * @param player The UUID to read the data from
-     * @param cache Whether the plugin should cache the data or not
-     * @return The UserData of the player
-     */
-    public static UserData loadData(UUID player, boolean cache) {
+    public static boolean hasJoinedBefore(UUID uuid) {
 
-        if(Main.storageType == StorageType.FILE) {
-            if(Main.dataFile.getData().getString("players." + player) != null) {
-                // User has account, load from file
-                String name = Main.dataFile.getData().getString("players." + player + ".username");
-                Double money = Main.dataFile.getData().getDouble("players." + player + ".money");
-                UserData data = new UserData(player, name, money);
-                if(cache) {
-                    UserDataCache.getInstance().add(data);
-                }
-                return data;
-            } else {
-                // User doesn't have account, create new cache (if cache = true), saving wil occur on leave
-                UserData userData = new UserData(player, null, 0D);
-                if(cache) {
-                    UserDataCache.getInstance().add(userData);
-                }
-                return userData;
+        if (Main.storageType == StorageType.FILE) {
+            if (Main.dataFile.getData().getString("players." + uuid) != null) {
+                return true;
             }
         }
 
         if(Main.storageType == StorageType.MYSQL) {
             try {
                 PreparedStatement pst = MySQL.getConnection().prepareStatement("SELECT * FROM `UserData` WHERE `UUID` = ?;");
-                pst.setString(1, player.toString());
+                pst.setString(1, uuid.toString());
                 ResultSet res = pst.executeQuery();
                 if(res.next()) {
+                    return true;
+                }
+            } catch(SQLException e) {
+                Logger.consoleOutput(Logger.InfoLevel.ERROR, "Er ging iets fout tijdens het laden van de data voor " + uuid.toString());
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Reads UserData from database or file storage
+     *
+     * @param player The UUID to read the data from
+     * @param cache  Whether the plugin should cache the data or not
+     * @return The UserData of the player
+     */
+    public static UserData loadData(UUID player, boolean cache) {
+
+        if (Main.storageType == StorageType.FILE) {
+            if (Main.dataFile.getData().getString("players." + player) != null) {
+                // User has account, load from file
+                String name = Main.dataFile.getData().getString("players." + player + ".username");
+                Double money = Main.dataFile.getData().getDouble("players." + player + ".money");
+                UserData data = new UserData(player, name, money);
+                if (cache) {
+                    UserDataCache.getInstance().add(data);
+                }
+                return data;
+            } else {
+                // User doesn't have account, create new cache (if cache = true), saving wil occur on leave
+                UserData userData = new UserData(player, null, 0D);
+                if (cache) {
+                    UserDataCache.getInstance().add(userData);
+                }
+                return userData;
+            }
+        }
+
+        if (Main.storageType == StorageType.MYSQL) {
+            try {
+                PreparedStatement pst = MySQL.getConnection().prepareStatement("SELECT * FROM `UserData` WHERE `UUID` = ?;");
+                pst.setString(1, player.toString());
+                ResultSet res = pst.executeQuery();
+                if (res.next()) {
                     // User has account, load from database
                     UserData userData = new UserData(player, res.getString("username"), res.getDouble("money"));
-                    if(cache) {
+                    if (cache) {
                         UserDataCache.getInstance().add(userData);
                     }
                     MySQL.close();
@@ -61,13 +87,13 @@ public class DataManager {
                 } else {
                     // User doesn't have account, create new cache (if cache = true), saving will occur on leave
                     UserData userData = new UserData(player, null, 0D);
-                    if(cache) {
+                    if (cache) {
                         UserDataCache.getInstance().add(userData);
                     }
                     MySQL.close();
                     return userData;
                 }
-            } catch(SQLException e) {
+            } catch (SQLException e) {
                 Logger.consoleOutput(Logger.InfoLevel.ERROR, "Er ging iets fout tijdens het laden van de data voor " + player.toString());
             }
         }
@@ -76,28 +102,29 @@ public class DataManager {
 
     /**
      * Saves cached data
+     *
      * @param player The UUID for the UserData to save
      */
     public static void saveCachedData(UUID player) {
 
-        if(Main.storageType == StorageType.FILE) {
+        if (Main.storageType == StorageType.FILE) {
             try {
                 UserData cachedData = UserDataCache.getInstance().get(player);
                 Main.dataFile.getData().set("players." + player + ".username", cachedData.name);
                 Main.dataFile.getData().set("players." + player + ".money", cachedData.money);
                 Main.dataFile.saveFile();
-            } catch(Exception e) {
+            } catch (Exception e) {
                 Logger.consoleOutput(Logger.InfoLevel.ERROR, "Er ging iets fout tijdens het opslaan van de data voor " + player.toString());
             }
         }
 
-        if(Main.storageType == StorageType.MYSQL) {
+        if (Main.storageType == StorageType.MYSQL) {
             try {
                 PreparedStatement pst = MySQL.getConnection().prepareStatement("SELECT * FROM `UserData` WHERE `UUID` = ?;");
                 pst.setString(1, player.toString());
                 ResultSet res = pst.executeQuery();
                 UserData cachedData = UserDataCache.getInstance().get(player);
-                if(res.next()) {
+                if (res.next()) {
                     // User has account, update guery
                     pst = MySQL.getConnection().prepareStatement("UPDATE `UserData` SET `username` = ?, `money` = ? WHERE `UUID` = ?;");
                     pst.setString(1, cachedData.name);
@@ -116,7 +143,7 @@ public class DataManager {
                     UserDataCache.getInstance().remove(player);
                     MySQL.close();
                 }
-            } catch(SQLException e) {
+            } catch (SQLException e) {
                 Logger.consoleOutput(Logger.InfoLevel.ERROR, "Er ging iets fout tijdens het opslaan van de data voor " + player.toString());
             }
         }
