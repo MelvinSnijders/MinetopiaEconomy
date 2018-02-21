@@ -1,4 +1,4 @@
-![MinetopiaEconomy](https://img.themelvin.nl/sygdy.png)
+![MinetopiaEconomy](https://img.themelvin.nl/8kffg.png)
 
 ## Installatie
 TODO
