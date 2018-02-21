@@ -1,10 +1,10 @@
-## THIS PLUGIN ISN'T FINISHED YET!
-
-# MinetopiaEconomy
-A MySQL based Economy plugin for Minetopia servers.
+![MinetopiaEconomy](https://img.themelvin.nl/sygdy.png)
 
 ## Installatie
 TODO
+
+## Doneer
+Doneren kan via de volgende link: https://paypal.me/melvinsnijders
 
 ## License
 MIT License
