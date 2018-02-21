@@ -1,12 +1,3 @@
-## THIS PLUGIN ISN'T FINISHED YET!
-
-# MinetopiaEconomy
-A MySQL based Economy plugin for Minetopia servers.
-
-## Installatie
-TODO
-
-## License
 MIT License
 
 Copyright (c) 2018 Melvin Snijders and Contributors
