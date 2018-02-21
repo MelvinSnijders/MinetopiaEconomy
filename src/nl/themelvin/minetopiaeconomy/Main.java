@@ -1,6 +1,5 @@
 package nl.themelvin.minetopiaeconomy;
 
-import net.milkbowl.vault.Vault;
 import net.milkbowl.vault.economy.Economy;
 import nl.themelvin.minetopiaeconomy.commands.CmdBalanceTop;
 import nl.themelvin.minetopiaeconomy.commands.CmdEconomy;
@@ -11,17 +10,16 @@ import nl.themelvin.minetopiaeconomy.storage.DataManager;
 import nl.themelvin.minetopiaeconomy.storage.StorageType;
 import nl.themelvin.minetopiaeconomy.storage.database.MySQL;
 import nl.themelvin.minetopiaeconomy.storage.file.FileManager;
-import nl.themelvin.minetopiaeconomy.user.UserData;
 import nl.themelvin.minetopiaeconomy.user.UserDataCache;
 import nl.themelvin.minetopiaeconomy.utils.Logger;
 import org.bukkit.Bukkit;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.logging.Level;
 
 public class Main extends JavaPlugin {
@@ -73,7 +71,8 @@ public class Main extends JavaPlugin {
             // Trying to connect to database and creating table if not exists
             if(MySQL.getConnection() != null) {
                 try {
-                    MySQL.getConnection().createStatement().executeUpdate("CREATE TABLE IF NOT EXISTS `UserData` (" +
+                    Statement st = MySQL.getConnection().createStatement();
+                    st.executeUpdate("CREATE TABLE IF NOT EXISTS `UserData` (" +
                             "  `userID` INT NOT NULL AUTO_INCREMENT," +
                             "  `UUID` VARCHAR(36) NOT NULL," +
                             "  `username` VARCHAR(16)," +
