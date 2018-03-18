@@ -160,7 +160,10 @@ public class EconomyHandler implements Economy {
     public double getBalance(OfflinePlayer player) {
 
         if(player != null && player.isOnline()) {
-            // Player is online, read balance from cache
+             // Player is online, read balance from cache, extra null check
+            if(UserDataCache.getInstance().get(player.getUniqueId()).money == null) {
+                return DataManager.loadData(player.getUniqueId(), false).money;
+            }
             return UserDataCache.getInstance().get(player.getUniqueId()).money;
         } else {
             return DataManager.loadData(player.getUniqueId(), false).money;
