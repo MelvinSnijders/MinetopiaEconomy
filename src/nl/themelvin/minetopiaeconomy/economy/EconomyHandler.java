@@ -111,7 +111,7 @@ public class EconomyHandler implements Economy {
      */
     @Override
     public boolean hasAccount(OfflinePlayer player) {
-        if(Bukkit.getPlayer(player.getName()) != null) {
+        if(player != null && player.isOnline()) {
             // Player is online, so has account
             return true;
         } else {
@@ -159,7 +159,7 @@ public class EconomyHandler implements Economy {
     @Override
     public double getBalance(OfflinePlayer player) {
 
-        if(Bukkit.getPlayer(player.getName()) != null) {
+        if(player != null && player.isOnline()) {
             // Player is online, read balance from cache
             return UserDataCache.getInstance().get(player.getUniqueId()).money;
         } else {
@@ -254,7 +254,7 @@ public class EconomyHandler implements Economy {
 
         UserData data;
 
-        if(Bukkit.getPlayer(player.getName()) != null) {
+        if(player != null && player.isOnline()) {
             // Player is online
             data = UserDataCache.getInstance().get(player.getUniqueId());
         } else {
@@ -315,7 +315,7 @@ public class EconomyHandler implements Economy {
 
         UserData data;
 
-        if(Bukkit.getPlayer(player.getName()) != null) {
+        if(player != null && player.isOnline()) {
             // Player is online
             data = UserDataCache.getInstance().get(player.getUniqueId());
         } else {
