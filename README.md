@@ -19,6 +19,9 @@ Deze plugin maakt gebruik van meerdere manieren om lag te verminderen, een groot
 ## Doneer
 Doneren kan via de volgende link: https://paypal.me/melvinsnijders
 
+## Comitten
+Ben jij een Developer en heb je een bug gevonden, of misschien een nieuwe feature en wil je die in MinetopiaEconomy laten plaatsen? Fork de repository en doe een commit naar de `development` branch, alle commits naar `master` worden genegeerd! Ik kijk naar wat je hebt gemaakt / bedacht en zal dan mergen.
+
 ## License
 MIT License
 
