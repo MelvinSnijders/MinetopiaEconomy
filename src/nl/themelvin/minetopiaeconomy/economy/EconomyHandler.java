@@ -1,15 +1,16 @@
 package nl.themelvin.minetopiaeconomy.economy;
 
+import java.util.List;
+
+import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
+import org.bukkit.plugin.Plugin;
+
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
 import nl.themelvin.minetopiaeconomy.storage.DataManager;
 import nl.themelvin.minetopiaeconomy.user.UserData;
 import nl.themelvin.minetopiaeconomy.user.UserDataCache;
-import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
-import org.bukkit.plugin.Plugin;
-
-import java.util.List;
 
 /**
  * Class for handling Economy
@@ -99,7 +100,9 @@ public class EconomyHandler implements Economy {
     @Deprecated
     @Override
     public boolean hasAccount(String s) {
-        return false;
+    	//Keeping this here for legacy purposes.
+    	OfflinePlayer player = Bukkit.getOfflinePlayer(s);
+        return hasAccount(player);
     }
 
     /**
@@ -127,7 +130,9 @@ public class EconomyHandler implements Economy {
      */
     @Override
     public boolean hasAccount(String playerName, String worldName) {
-        return false;
+    	//Keeping this here for legacy purposes.
+    	OfflinePlayer player = Bukkit.getOfflinePlayer(playerName);
+        return hasAccount(player, worldName);
     }
 
     /**
@@ -148,7 +153,9 @@ public class EconomyHandler implements Economy {
      */
     @Override
     public double getBalance(String s) {
-        return 0;
+    	//Keeping this here for legacy purposes.
+    	OfflinePlayer player = Bukkit.getOfflinePlayer(s);
+        return getBalance(player);
     }
 
     /**
@@ -176,8 +183,10 @@ public class EconomyHandler implements Economy {
      */
     @Deprecated
     @Override
-    public double getBalance(String s, String s1) {
-        return 0;
+    public double getBalance(String s, String world) {
+    	//Keeping this here for legacy purposes.
+    	OfflinePlayer player = Bukkit.getOfflinePlayer(s);
+        return getBalance(player, world);
     }
 
     /**
@@ -198,7 +207,9 @@ public class EconomyHandler implements Economy {
     @Deprecated
     @Override
     public boolean has(String s, double v) {
-        return false;
+    	//Keeping this here for legacy purposes.
+    	OfflinePlayer player = Bukkit.getOfflinePlayer(s);
+        return has(player, v);
     }
 
     /**
@@ -209,16 +220,21 @@ public class EconomyHandler implements Economy {
      */
     @Override
     public boolean has(OfflinePlayer player, double amount) {
+    	if (amount < 0) {
+    		throw new IllegalArgumentException("Negative amount given whilst positive amount expected.");
+    	}
         return getBalance(player) >= amount;
     }
 
     /**
-     * @deprecated As of VaultAPI 1.4 use @{link {@link #has(OfflinePlayer, String, double)} instead.
+     * @deprecated As of VaultAPI 1.4 use {@link #has(OfflinePlayer, String, double)} instead.
      */
     @Deprecated
     @Override
     public boolean has(String s, String s1, double v) {
-        return false;
+    	//Keeping this in place for legacy reasons
+    	OfflinePlayer player = Bukkit.getOfflinePlayer(s);
+        return has(player, s1, v);
     }
 
     /**
@@ -240,7 +256,9 @@ public class EconomyHandler implements Economy {
     @Deprecated
     @Override
     public EconomyResponse withdrawPlayer(String s, double v) {
-        return null;
+    	//Keeping this here for legacy purposes.
+    	OfflinePlayer player = Bukkit.getOfflinePlayer(s);
+        return withdrawPlayer(player, v);
     }
 
     /**
@@ -278,8 +296,11 @@ public class EconomyHandler implements Economy {
      */
     @Deprecated
     @Override
-    public EconomyResponse withdrawPlayer(String s, String s1, double v) {
-        return null;
+    public EconomyResponse withdrawPlayer(String playerName, String worldName, double amount) {
+    	//Keeping this here for legacy purposes.
+    	OfflinePlayer player = Bukkit.getOfflinePlayer(playerName);
+    	
+        return withdrawPlayer(player, worldName, amount);
     }
 
     /**
@@ -300,8 +321,10 @@ public class EconomyHandler implements Economy {
     */
     @Deprecated
     @Override
-    public EconomyResponse depositPlayer(String s, double v) {
-        return null;
+    public EconomyResponse depositPlayer(String s, double amount) {
+    	//Keeping this here for legacy purposes.
+    	OfflinePlayer player = Bukkit.getOfflinePlayer(s);
+        return depositPlayer(player, amount);
     }
 
     /**
@@ -336,7 +359,10 @@ public class EconomyHandler implements Economy {
     @Deprecated
     @Override
     public EconomyResponse depositPlayer(String s, String s1, double v) {
-        return null;
+
+    	//Keeping this here for legacy purposes.
+    	OfflinePlayer player = Bukkit.getOfflinePlayer(s);
+        return depositPlayer(player, s1, v);
     }
 
     /**
@@ -425,12 +451,14 @@ public class EconomyHandler implements Economy {
     }
 
     /**
-     * @deprecated As of VaultAPI 1.4 use {{@link #createPlayerAccount(OfflinePlayer)} instead.
+     * @deprecated As of VaultAPI 1.4 use {@link #createPlayerAccount(OfflinePlayer)} instead.
      */
     @Deprecated
     @Override
     public boolean createPlayerAccount(String s) {
-        return false;
+    	//Useless? Yeah, for now it is.
+    	OfflinePlayer player = Bukkit.getOfflinePlayer(s);
+        return createPlayerAccount(player);
     }
 
     /**
@@ -449,7 +477,9 @@ public class EconomyHandler implements Economy {
     @Deprecated
     @Override
     public boolean createPlayerAccount(String s, String s1) {
-        return false;
+    	//Useless? Yeah, for now it is.
+    	OfflinePlayer player = Bukkit.getOfflinePlayer(s);
+        return createPlayerAccount(player, s1);
     }
 
     /**
