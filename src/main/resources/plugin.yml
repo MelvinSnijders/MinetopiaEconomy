@@ -1,6 +1,6 @@
 name: MinetopiaEconomy
 author: TheMelvinNL
-version: 1.0.2
+version: 2.0.0
 main: nl.themelvin.minetopiaeconomy.Main
 softdepend: [Vault]
 commands:

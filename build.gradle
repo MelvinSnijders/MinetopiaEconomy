@@ -1,0 +1,60 @@
+plugins {
+    id 'java'
+    id "net.ltgt.apt" version "0.21"
+}
+
+group 'nl.themelvin'
+version '2.0.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+compileJava.options.encoding = "UTF-8"
+
+repositories {
+
+    mavenCentral()
+    jcenter()
+
+    maven {
+        url "https://hub.spigotmc.org/nexus/content/repositories/snapshots/"
+    }
+
+    maven {
+        url "https://oss.sonatype.org/content/repositories/snapshots"
+    }
+
+    maven {
+        url "http://nexus.hc.to/content/repositories/pub_releases"
+    }
+
+}
+
+configurations {
+    shade
+}
+
+dependencies {
+
+    // Normal dependencies
+    compile group: 'org.projectlombok', name: 'lombok', version: '1.18.6'
+    compile group: 'org.spigotmc', name: 'spigot-api', version: '1.9-R0.1-SNAPSHOT'
+    compile group: 'net.milkbowl.vault', name: 'VaultAPI', version: '1.7'
+    compile group: 'com.zaxxer', name: 'HikariCP', version: '3.3.1'
+
+    // Dependencies that should be shaded in the plugin.
+    shade (group: 'com.zaxxer', name: 'HikariCP', version: '3.3.1') {
+        exclude group: 'org.slf4j', module: 'slf4j-api'
+    }
+    shade group: 'org.slf4j', name: 'slf4j-nop', version: '1.7.25'
+
+    // Annotation processor
+    annotationProcessor group: 'org.projectlombok', name: 'lombok', version: '1.18.6'
+
+}
+
+jar {
+    from {
+        configurations.shade.collect { it.isDirectory() ? it : zipTree(it) }
+    } {
+        exclude "plugin.yml"
+    }
+}
