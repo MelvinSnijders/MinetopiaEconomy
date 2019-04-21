@@ -10,6 +10,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 import static com.ea.async.Async.await;
 import static java.util.concurrent.CompletableFuture.completedFuture;
@@ -20,10 +21,12 @@ public class Profile extends Model<Profile> {
     @Getter
     private UUID uuid;
 
-    @Getter @Setter
+    @Getter
+    @Setter
     private String username;
 
-    @Getter @Setter
+    @Getter
+    @Setter
     private double money = 0D;
 
     public Profile(UUID uuid) {
@@ -86,7 +89,7 @@ public class Profile extends Model<Profile> {
 
                 ResultSet resultSet = preparedStatement.executeQuery();
 
-                if(!resultSet.next()) {
+                if (!resultSet.next()) {
                     return false;
                 }
 
@@ -153,9 +156,17 @@ public class Profile extends Model<Profile> {
     @Override
     public CompletableFuture<Profile> init() {
 
-        if(!await(this.load()) && !await(this.create())) {
+        try {
 
-            this.money = 0;
+            if (!this.load().get() && !this.create().get()) {
+
+                this.money = 0;
+
+            }
+
+        } catch (InterruptedException | ExecutionException e) {
+
+            e.printStackTrace();
 
         }
 

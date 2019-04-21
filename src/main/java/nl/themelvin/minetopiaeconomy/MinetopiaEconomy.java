@@ -16,6 +16,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.Plugin;
@@ -28,6 +29,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import static com.ea.async.Async.await;
 import static nl.themelvin.minetopiaeconomy.utils.Logger.*;
 
 public class MinetopiaEconomy extends JavaPlugin {
@@ -89,6 +91,9 @@ public class MinetopiaEconomy extends JavaPlugin {
         // Fake join for all online players
         for(Player onlinePlayer : Bukkit.getOnlinePlayers()) {
 
+            AsyncPlayerPreLoginEvent preLogin = new AsyncPlayerPreLoginEvent(onlinePlayer.getName(), onlinePlayer.getAddress().getAddress(), onlinePlayer.getUniqueId());
+            new LoginListener(this).listen(preLogin);
+
             PlayerJoinEvent joinEvent = new PlayerJoinEvent(onlinePlayer, null);
             new JoinListener(this).listen(joinEvent);
 
@@ -104,11 +109,11 @@ public class MinetopiaEconomy extends JavaPlugin {
 
         log(Severity.INFO, "Alle online spelers worden opgeslagen.");
 
-        // Fake quit for all online players
+        // Save all online profiles
         for(Player onlinePlayer : Bukkit.getOnlinePlayers()) {
 
             PlayerQuitEvent quitEvent = new PlayerQuitEvent(onlinePlayer, null);
-            new QuitListener(this).listen(quitEvent);
+            await(new QuitListener(this).listen(quitEvent));
 
         }
 
