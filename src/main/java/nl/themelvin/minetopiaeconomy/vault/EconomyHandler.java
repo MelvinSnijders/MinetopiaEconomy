@@ -1,10 +1,12 @@
 package nl.themelvin.minetopiaeconomy.vault;
 
 import net.milkbowl.vault.economy.AbstractEconomy;
+import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
 import nl.themelvin.minetopiaeconomy.MinetopiaEconomy;
+import org.bukkit.OfflinePlayer;
 
-public class EconomyHandler extends AbstractEconomy implements NoBankEconomy, NoAccountNameEconomy {
+public class EconomyHandler implements Economy, NoBankEconomy, NoAccountNameEconomy, NoWorldNameEconomy {
 
     @Override
     public boolean isEnabled() {
@@ -42,7 +44,17 @@ public class EconomyHandler extends AbstractEconomy implements NoBankEconomy, No
     }
 
     @Override
+    public boolean hasAccount(OfflinePlayer offlinePlayer) {
+        return false;
+    }
+
+    @Override
     public double getBalance(String playerName) {
+        return 0;
+    }
+
+    @Override
+    public double getBalance(OfflinePlayer offlinePlayer) {
         return 0;
     }
 
@@ -52,7 +64,17 @@ public class EconomyHandler extends AbstractEconomy implements NoBankEconomy, No
     }
 
     @Override
+    public boolean has(OfflinePlayer offlinePlayer, double money) {
+        return false;
+    }
+
+    @Override
     public EconomyResponse withdrawPlayer(String playerName, double money) {
+        return null;
+    }
+
+    @Override
+    public EconomyResponse withdrawPlayer(OfflinePlayer offlinePlayer, double money) {
         return null;
     }
 
@@ -62,7 +84,17 @@ public class EconomyHandler extends AbstractEconomy implements NoBankEconomy, No
     }
 
     @Override
+    public EconomyResponse depositPlayer(OfflinePlayer offlinePlayer, double money) {
+        return null;
+    }
+
+    @Override
     public boolean createPlayerAccount(String playerName) {
+        return false;
+    }
+
+    @Override
+    public boolean createPlayerAccount(OfflinePlayer offlinePlayer) {
         return false;
     }
 

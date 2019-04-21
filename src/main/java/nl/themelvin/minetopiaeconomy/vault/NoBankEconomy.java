@@ -2,6 +2,7 @@ package nl.themelvin.minetopiaeconomy.vault;
 
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
+import org.bukkit.OfflinePlayer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,6 +51,21 @@ public interface  NoBankEconomy extends Economy {
 
     @Override
     default EconomyResponse isBankMember(String paramString1, String paramString2) {
+        return createUnsupportedResponse();
+    }
+
+    @Override
+    default EconomyResponse createBank(String s, OfflinePlayer offlinePlayer) {
+        return createUnsupportedResponse();
+    }
+
+    @Override
+    default EconomyResponse isBankOwner(String s, OfflinePlayer offlinePlayer) {
+        return createUnsupportedResponse();
+    }
+
+    @Override
+    default EconomyResponse isBankMember(String s, OfflinePlayer offlinePlayer) {
         return createUnsupportedResponse();
     }
 

@@ -39,6 +39,7 @@ dependencies {
     compile group: 'org.spigotmc', name: 'spigot-api', version: '1.9-R0.1-SNAPSHOT'
     compile group: 'net.milkbowl.vault', name: 'VaultAPI', version: '1.7'
     compile group: 'com.zaxxer', name: 'HikariCP', version: '3.3.1'
+    compile group: 'com.ea.async', name: 'ea-async', version: '1.2.2'
 
     // Dependencies that should be shaded in the plugin.
     shade (group: 'com.zaxxer', name: 'HikariCP', version: '3.3.1') {
