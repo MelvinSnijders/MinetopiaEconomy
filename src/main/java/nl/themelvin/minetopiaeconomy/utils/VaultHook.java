@@ -7,22 +7,21 @@ import org.bukkit.plugin.ServicePriority;
 
 public class VaultHook {
 
-    private final Economy economy;
+    private final Class<? extends Economy> economyClass;
 
-    public VaultHook(Economy economy) {
+    public VaultHook(Class<? extends Economy> economyClass) {
 
-        this.economy = economy;
+        this.economyClass = economyClass;
 
     }
 
-    public boolean hook() {
+    public void hook() {
 
-        if(Bukkit.getPluginManager().getPlugin("Vault") == null) {
-            return false;
+        try {
+            Bukkit.getServicesManager().register(Economy.class, economyClass.newInstance(), MinetopiaEconomy.getPlugin(), ServicePriority.Highest);
+        } catch (InstantiationException | IllegalAccessException e) {
+            e.printStackTrace();
         }
-
-        Bukkit.getServicesManager().register(Economy.class, economy, MinetopiaEconomy.getPlugin(), ServicePriority.Highest);
-        return true;
 
     }
 

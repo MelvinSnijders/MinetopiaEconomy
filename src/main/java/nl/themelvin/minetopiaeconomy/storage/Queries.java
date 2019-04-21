@@ -13,4 +13,6 @@ public class Queries {
 
     public final static String SELECT = "SELECT * FROM `profiles` WHERE uuid = ? OR username = ?";
 
+    public final static String UPDATE = "UPDATE `profiles` SET username = ?, money = ? WHERE uuid = ? OR username = ?";
+
 }

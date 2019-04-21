@@ -22,6 +22,7 @@ storage: sqlite
 # De gegevens van je database, enkel nodig als je bij de vorige optie 'mysql' hebt ingevuld. Kies de juiste database, deze wordt niet aangemaakt!
 database:
   host: 127.0.0.1
+  port: 3306
   database: minetopiaeconomy
   username: admin
   password: password

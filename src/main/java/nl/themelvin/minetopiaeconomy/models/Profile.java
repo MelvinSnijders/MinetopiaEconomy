@@ -12,12 +12,10 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 import static com.ea.async.Async.await;
+import static java.util.concurrent.CompletableFuture.completedFuture;
 import static nl.themelvin.minetopiaeconomy.utils.Logger.*;
 
 public class Profile extends Model<Profile> {
-
-    // executeUpdate(): UPDATE, INSERT, DELETE
-    // executeQuery(): SELECT
 
     @Getter
     private UUID uuid;
@@ -34,6 +32,18 @@ public class Profile extends Model<Profile> {
 
     public Profile(String username) {
         this.username = username;
+    }
+
+    public Profile get() {
+
+        return MinetopiaEconomy.getOnlineProfiles().get(this.uuid);
+
+    }
+
+    public void unCache() {
+
+        MinetopiaEconomy.getOnlineProfiles().remove(this.uuid);
+
     }
 
     @Override
@@ -75,9 +85,15 @@ public class Profile extends Model<Profile> {
                 preparedStatement.setString(2, value);
 
                 ResultSet resultSet = preparedStatement.executeQuery();
-                resultSet.
 
-                return preparedStatement.executeUpdate() == 1;
+                if(!resultSet.next()) {
+                    return false;
+                }
+
+                this.username = resultSet.getString("username");
+                this.money = resultSet.getDouble("money");
+
+                return true;
 
             } catch (SQLException e) {
 
@@ -86,26 +102,65 @@ public class Profile extends Model<Profile> {
 
             }
 
+            return false;
+
         });
 
     }
 
     @Override
+    public CompletableFuture<Boolean> load() {
+
+        return this.load(this.uuid.toString());
+
+    }
+
+    @Override
     public CompletableFuture<Boolean> update(String value) {
-        return null;
+
+        return CompletableFuture.supplyAsync(() -> {
+
+            try {
+
+                PreparedStatement preparedStatement = hikari.getConnection().prepareStatement(Queries.UPDATE);
+                preparedStatement.setString(1, this.username);
+                preparedStatement.setDouble(2, this.money);
+                preparedStatement.setString(3, value);
+                preparedStatement.setString(4, value);
+
+                return preparedStatement.executeUpdate() == 1;
+
+            } catch (SQLException e) {
+
+                log(Severity.ERROR, "Er ging iets mis tijdens het updaten van data voor " + value);
+                e.printStackTrace();
+
+            }
+
+            return false;
+
+        });
+
+    }
+
+    @Override
+    public CompletableFuture<Boolean> update() {
+
+        return this.update(this.uuid.toString());
+
     }
 
     @Override
     public CompletableFuture<Profile> init() {
 
-        if(!await(this.load(this.uuid.toString())) && !await(this.create())) {
+        if(!await(this.load()) && !await(this.create())) {
 
-
-
+            this.money = 0;
 
         }
 
         MinetopiaEconomy.getOnlineProfiles().put(this.uuid, this);
+        return completedFuture(this);
 
     }
 

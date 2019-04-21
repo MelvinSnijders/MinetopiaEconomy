@@ -29,7 +29,7 @@ public class Logger {
 
     public enum Severity {
 
-        INFO("&2[MineNationXL INFO]"), WARNING("&6[MineNationXL WARNING]"), ERROR("&4[MineNationXL ERROR]"), DEBUG("&5[MineNationXL DEBUG]");
+        INFO("&2[MinetopiaEconomy INFO]"), WARNING("&6[MinetopiaEconomy WARNING]"), ERROR("&4[MinetopiaEconomy ERROR]"), DEBUG("&5[MinetopiaEconomy DEBUG]");
 
         String prefix;
 

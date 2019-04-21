@@ -52,6 +52,17 @@ dependencies {
 
 }
 
+task instrument(type: JavaExec) {
+    main = 'com.ea.async.instrumentation.Main'
+    classpath = sourceSets.main.compileClasspath
+    args "$buildDir"
+}
+
+compileJava.doLast {
+    tasks.instrument.execute()
+}
+
+
 jar {
     from {
         configurations.shade.collect { it.isDirectory() ? it : zipTree(it) }

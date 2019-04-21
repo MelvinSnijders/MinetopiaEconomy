@@ -17,8 +17,10 @@ public abstract class Model<T> {
     public abstract CompletableFuture<Boolean> create();
 
     public abstract CompletableFuture<Boolean> load(String value);
+    public abstract CompletableFuture<Boolean> load();
 
     public abstract CompletableFuture<Boolean> update(String value);
+    public abstract CompletableFuture<Boolean> update();
 
     public abstract CompletableFuture<T> init();
 
@@ -39,8 +41,9 @@ public abstract class Model<T> {
                 break;
 
             case "sqlite":
+
                 hikari.setDriverClassName("org.sqlite.JDBC");
-                hikari.setJdbcUrl("jdbc:sqlite:plugins/MinetopiaEconomy/economy.db");
+                hikari.setJdbcUrl("jdbc:sqlite:plugins/MinetopiaEconomy/data/economy.db");
                 break;
 
         }
@@ -61,6 +64,12 @@ public abstract class Model<T> {
         }
 
         return hikari.isRunning();
+
+    }
+
+    public static void closePool() {
+
+        hikari.close();
 
     }
 
