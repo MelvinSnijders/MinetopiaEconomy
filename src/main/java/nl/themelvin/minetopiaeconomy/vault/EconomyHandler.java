@@ -4,7 +4,7 @@ import net.milkbowl.vault.economy.AbstractEconomy;
 import net.milkbowl.vault.economy.EconomyResponse;
 import nl.themelvin.minetopiaeconomy.MinetopiaEconomy;
 
-public class EconomyHandler extends AbstractEconomy implements NoBankEconomy {
+public class EconomyHandler extends AbstractEconomy implements NoBankEconomy, NoAccountNameEconomy {
 
     @Override
     public boolean isEnabled() {
@@ -37,62 +37,32 @@ public class EconomyHandler extends AbstractEconomy implements NoBankEconomy {
     }
 
     @Override
-    public boolean hasAccount(String s) {
+    public boolean hasAccount(String playerName) {
         return false;
     }
 
     @Override
-    public boolean hasAccount(String s, String s1) {
-        return false;
-    }
-
-    @Override
-    public double getBalance(String s) {
+    public double getBalance(String playerName) {
         return 0;
     }
 
     @Override
-    public double getBalance(String s, String s1) {
-        return 0;
-    }
-
-    @Override
-    public boolean has(String s, double v) {
+    public boolean has(String playerName, double money) {
         return false;
     }
 
     @Override
-    public boolean has(String s, String s1, double v) {
-        return false;
-    }
-
-    @Override
-    public EconomyResponse withdrawPlayer(String s, double v) {
+    public EconomyResponse withdrawPlayer(String playerName, double money) {
         return null;
     }
 
     @Override
-    public EconomyResponse withdrawPlayer(String s, String s1, double v) {
+    public EconomyResponse depositPlayer(String playerName, double money) {
         return null;
     }
 
     @Override
-    public EconomyResponse depositPlayer(String s, double v) {
-        return null;
-    }
-
-    @Override
-    public EconomyResponse depositPlayer(String s, String s1, double v) {
-        return null;
-    }
-
-    @Override
-    public boolean createPlayerAccount(String s) {
-        return false;
-    }
-
-    @Override
-    public boolean createPlayerAccount(String s, String s1) {
+    public boolean createPlayerAccount(String playerName) {
         return false;
     }
 
