@@ -15,4 +15,6 @@ public class Queries {
 
     public final static String UPDATE = "UPDATE `profiles` SET username = ?, money = ? WHERE uuid = ? OR username = ?";
 
+    public final static String ORDER_MONEY = "SELECT * FROM `profiles` ORDER BY `money` DESC LIMIT 10";
+
 }

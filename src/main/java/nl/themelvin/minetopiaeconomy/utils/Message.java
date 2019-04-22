@@ -38,4 +38,14 @@ public class Message {
 
     }
 
+    public String get(String replace1, String with1, String replace2, String with2, String replace3, String with3) {
+
+        return __(MinetopiaEconomy.messages().getString(this.id)
+                .replaceAll("%" + replace1 + "%", with1)
+                .replaceAll("%" + replace2 + "%", with2)
+                .replaceAll("%" + replace3 + "%", with3)
+        );
+
+    }
+
 }

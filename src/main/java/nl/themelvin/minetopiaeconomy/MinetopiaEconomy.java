@@ -2,12 +2,15 @@ package nl.themelvin.minetopiaeconomy;
 
 import lombok.Getter;
 import nl.themelvin.minetopiaeconomy.commands.AbstractCommand;
+import nl.themelvin.minetopiaeconomy.commands.BalancetopCommand;
+import nl.themelvin.minetopiaeconomy.commands.MoneyCommand;
 import nl.themelvin.minetopiaeconomy.listeners.AbstractListener;
 import nl.themelvin.minetopiaeconomy.listeners.JoinListener;
 import nl.themelvin.minetopiaeconomy.listeners.LoginListener;
 import nl.themelvin.minetopiaeconomy.listeners.QuitListener;
 import nl.themelvin.minetopiaeconomy.models.Model;
 import nl.themelvin.minetopiaeconomy.models.Profile;
+import nl.themelvin.minetopiaeconomy.storage.DataSaver;
 import nl.themelvin.minetopiaeconomy.utils.Configuration;
 import nl.themelvin.minetopiaeconomy.utils.Logger;
 import nl.themelvin.minetopiaeconomy.utils.VaultHook;
@@ -88,6 +91,10 @@ public class MinetopiaEconomy extends JavaPlugin {
         this.registerListener(JoinListener.class);
         this.registerListener(QuitListener.class);
 
+        // Register commands
+        this.registerCommand("money", MoneyCommand.class);
+        this.registerCommand("balancetop", BalancetopCommand.class);
+
         // Fake join for all online players
         for(Player onlinePlayer : Bukkit.getOnlinePlayers()) {
 
@@ -98,6 +105,9 @@ public class MinetopiaEconomy extends JavaPlugin {
             new JoinListener(this).listen(joinEvent);
 
         }
+
+        // Save all data (async) every 5 minutes.
+        Bukkit.getScheduler().runTaskTimer(this, new DataSaver(), 5 /*min*/ * 60 /*sec*/ * 20 /*ticks*/, 5 /*min*/ * 60 /*sec*/ * 20 /*ticks*/);
 
         // Log end
         log(Severity.INFO, "Klaar! Bedankt voor het gebruiken van deze plugin, het duurde " + (System.currentTimeMillis() - millis) + "ms.");

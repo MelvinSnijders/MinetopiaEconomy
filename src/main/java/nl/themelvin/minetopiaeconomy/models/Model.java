@@ -12,7 +12,7 @@ import java.util.concurrent.CompletableFuture;
 
 public abstract class Model<T> {
 
-    protected static HikariDataSource hikari;
+    public static HikariDataSource hikari;
 
     public abstract CompletableFuture<Boolean> create();
 
@@ -49,6 +49,8 @@ public abstract class Model<T> {
         }
 
         hikari.setConnectionTestQuery("SELECT 1");
+        hikari.setMaximumPoolSize(48);
+        hikari.setMaxLifetime(60000);
 
         try {
 
