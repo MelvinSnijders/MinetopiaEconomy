@@ -4,6 +4,7 @@ import lombok.Getter;
 import nl.themelvin.minetopiaeconomy.commands.AbstractCommand;
 import nl.themelvin.minetopiaeconomy.commands.BalancetopCommand;
 import nl.themelvin.minetopiaeconomy.commands.MoneyCommand;
+import nl.themelvin.minetopiaeconomy.commands.EconomyCommand;
 import nl.themelvin.minetopiaeconomy.listeners.AbstractListener;
 import nl.themelvin.minetopiaeconomy.listeners.JoinListener;
 import nl.themelvin.minetopiaeconomy.listeners.LoginListener;
@@ -94,6 +95,7 @@ public class MinetopiaEconomy extends JavaPlugin {
         // Register commands
         this.registerCommand("money", MoneyCommand.class);
         this.registerCommand("balancetop", BalancetopCommand.class);
+        this.registerCommand("economy", EconomyCommand.class);
 
         // Fake join for all online players
         for(Player onlinePlayer : Bukkit.getOnlinePlayers()) {

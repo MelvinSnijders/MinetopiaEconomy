@@ -92,6 +92,7 @@ public class Profile extends Model<Profile> {
                     return false;
                 }
 
+                this.uuid = UUID.fromString(resultSet.getString("uuid"));
                 this.username = resultSet.getString("username");
                 this.money = resultSet.getDouble("money");
 
