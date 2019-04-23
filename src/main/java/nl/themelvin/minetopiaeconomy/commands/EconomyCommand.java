@@ -66,7 +66,7 @@ public class EconomyCommand extends AbstractCommand {
                 }
 
                 double money = NumberUtils.toDouble(moneyString);
-                Profile targetProfile = this.getProfile();
+                Profile targetProfile = await(this.getProfile());
 
                 if(targetProfile == null) {
                     return completedFuture(null);
@@ -111,7 +111,7 @@ public class EconomyCommand extends AbstractCommand {
                 }
 
                 double money = NumberUtils.toDouble(moneyString);
-                Profile targetProfile = this.getProfile();
+                Profile targetProfile = await(this.getProfile());
 
                 if(targetProfile == null) {
                     return completedFuture(null);
@@ -164,7 +164,7 @@ public class EconomyCommand extends AbstractCommand {
 
                 double money = NumberUtils.toDouble(moneyString);
 
-                Profile result = this.setMoney(money);
+                Profile result = await(this.setMoney(money));
 
                 if (result != null) {
 
@@ -186,7 +186,7 @@ public class EconomyCommand extends AbstractCommand {
 
                 }
 
-                Profile result = this.setMoney(0D);
+                Profile result = await(this.setMoney(0D));
 
                 if (result != null) {
 
@@ -204,12 +204,17 @@ public class EconomyCommand extends AbstractCommand {
 
     }
 
-    private Profile setMoney(double money) {
+    private CompletableFuture<Profile> setMoney(double money) {
 
         Player targetPlayer = Bukkit.getPlayer(this.args[1]);
 
-        Profile targetProfile = this.getProfile();
-        targetProfile.setMoney(0D);
+        Profile targetProfile = await(this.getProfile());
+
+        if(targetProfile == null) {
+            return completedFuture(null);
+        }
+
+        targetProfile.setMoney(money);
 
         if(targetPlayer == null) {
 
@@ -217,11 +222,11 @@ public class EconomyCommand extends AbstractCommand {
 
         }
 
-        return targetProfile;
+        return completedFuture(targetProfile);
 
     }
 
-    private Profile getProfile() {
+    private CompletableFuture<Profile> getProfile() {
 
         String targetString = this.args[1];
         Player targetPlayer = Bukkit.getPlayer(this.args[1]);
@@ -244,9 +249,15 @@ public class EconomyCommand extends AbstractCommand {
 
             }
 
+            Profile cached = new Profile(targetProfile.getUuid()).get();
+
+            if(cached != null) {
+                targetProfile = cached;
+            }
+
         }
 
-        return targetProfile;
+        return completedFuture(targetProfile);
 
     }
 

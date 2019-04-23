@@ -9,6 +9,11 @@ import nl.themelvin.minetopiaeconomy.listeners.AbstractListener;
 import nl.themelvin.minetopiaeconomy.listeners.JoinListener;
 import nl.themelvin.minetopiaeconomy.listeners.LoginListener;
 import nl.themelvin.minetopiaeconomy.listeners.QuitListener;
+import nl.themelvin.minetopiaeconomy.messaging.PluginMessaging;
+import nl.themelvin.minetopiaeconomy.messaging.incoming.BalanceMessageHandler;
+import nl.themelvin.minetopiaeconomy.messaging.incoming.PlayerMessageHandler;
+import nl.themelvin.minetopiaeconomy.messaging.outgoing.BalanceMessage;
+import nl.themelvin.minetopiaeconomy.messaging.outgoing.PlayerMessage;
 import nl.themelvin.minetopiaeconomy.models.Model;
 import nl.themelvin.minetopiaeconomy.models.Profile;
 import nl.themelvin.minetopiaeconomy.storage.DataSaver;
@@ -81,7 +86,7 @@ public class MinetopiaEconomy extends JavaPlugin {
         }
 
         // Hook in Vault
-        if(Bukkit.getPluginManager().getPlugin("Vault") == null) {
+        if (Bukkit.getPluginManager().getPlugin("Vault") == null) {
             log(Severity.WARNING, "Vault is niet in deze server geinstalleerd. Deze plugin werkt ook zonder Vault, maar dat is niet aangeraden.");
         } else {
             new VaultHook(EconomyHandler.class).hook();
@@ -97,8 +102,28 @@ public class MinetopiaEconomy extends JavaPlugin {
         this.registerCommand("balancetop", BalancetopCommand.class);
         this.registerCommand("economy", EconomyCommand.class);
 
+        // Register plugin messaging
+        if (config.getBoolean("plugin-messaging")) {
+
+            if (!config.getString("storage").equalsIgnoreCase("mysql")) {
+
+                log(Severity.ERROR, "Je hebt plugin messaging aangezet, maar het opslagtype staat nog niet op MySQL. Plugin messaging (en dus live synchronisatie) kan alleen ingeschakeld worden wanneer het opslagtype MySQL is.");
+                Bukkit.getPluginManager().disablePlugin(this);
+                return;
+
+            }
+
+            this.getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
+            this.getServer().getMessenger().registerIncomingPluginChannel(this, "BungeeCord", PluginMessaging.getInstance());
+
+            PluginMessaging messaging = PluginMessaging.getInstance();
+            messaging.register("playerAction", PlayerMessage.class, PlayerMessageHandler.class);
+            messaging.register("balanceChange", BalanceMessage.class, BalanceMessageHandler.class);
+
+        }
+
         // Fake join for all online players
-        for(Player onlinePlayer : Bukkit.getOnlinePlayers()) {
+        for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
 
             AsyncPlayerPreLoginEvent preLogin = new AsyncPlayerPreLoginEvent(onlinePlayer.getName(), onlinePlayer.getAddress().getAddress(), onlinePlayer.getUniqueId());
             new LoginListener(this).listen(preLogin);
@@ -122,7 +147,7 @@ public class MinetopiaEconomy extends JavaPlugin {
         log(Severity.INFO, "Alle online spelers worden opgeslagen.");
 
         // Save all online profiles
-        for(Player onlinePlayer : Bukkit.getOnlinePlayers()) {
+        for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
 
             PlayerQuitEvent quitEvent = new PlayerQuitEvent(onlinePlayer, null);
             await(new QuitListener(this).listen(quitEvent));
@@ -140,8 +165,9 @@ public class MinetopiaEconomy extends JavaPlugin {
 
     /**
      * Register command to command register.
+     *
      * @param command Alias of the command
-     * @param clazz Cclass instance of the executor
+     * @param clazz   Cclass instance of the executor
      */
 
     private void registerCommand(String command, Class<?> clazz) {
@@ -151,7 +177,7 @@ public class MinetopiaEconomy extends JavaPlugin {
 
         List<String> aliases = this.getCommand(command).getAliases();
 
-        for (String alias: aliases) {
+        for (String alias : aliases) {
 
             this.commands.put(alias, clazz);
 

@@ -145,6 +145,14 @@ public class EconomyHandler implements Economy, NoBankEconomy, NoAccountNameEcon
         Profile profile = new Profile(playerName);
         profile.load(playerName).join();
 
+        Profile cached = new Profile(profile.getUuid()).get();
+
+        if(cached != null) {
+
+            return cached.getMoney();
+
+        }
+
         return profile.getMoney();
 
     }
@@ -159,14 +167,15 @@ public class EconomyHandler implements Economy, NoBankEconomy, NoAccountNameEcon
     @Override
     public double getBalance(OfflinePlayer offlinePlayer) {
 
-        if (offlinePlayer.isOnline()) {
+        Profile profile = new Profile(offlinePlayer.getUniqueId()).get();
 
-            Profile profile = new Profile(offlinePlayer.getUniqueId()).get();
+        if (profile != null) {
+
             return profile.getMoney();
 
         }
 
-        Profile profile = new Profile(offlinePlayer.getUniqueId());
+        profile = new Profile(offlinePlayer.getUniqueId());
         profile.load().join();
 
         return profile.getMoney();
@@ -235,6 +244,15 @@ public class EconomyHandler implements Economy, NoBankEconomy, NoAccountNameEcon
 
                 if (exists) {
 
+                    Profile cached = new Profile(targetProfile.getUuid()).get();
+
+                    if(cached != null) {
+
+                        cached.setMoney(cached.getMoney() - money);
+                        return;
+
+                    }
+
                     targetProfile.setMoney(targetProfile.getMoney() - money);
                     targetProfile.update();
 
@@ -263,9 +281,10 @@ public class EconomyHandler implements Economy, NoBankEconomy, NoAccountNameEcon
             return new EconomyResponse(0, 0, EconomyResponse.ResponseType.FAILURE, "Je kan geen negatieve bedragen afnemen.");
         }
 
-        if (offlinePlayer.isOnline()) {
+        Profile targetProfile = new Profile(offlinePlayer.getUniqueId()).get();
 
-            Profile targetProfile = new Profile(offlinePlayer.getUniqueId()).get();
+        if (targetProfile != null) {
+
             targetProfile.setMoney(targetProfile.getMoney() - money);
             return new EconomyResponse(money, targetProfile.getMoney(), EconomyResponse.ResponseType.SUCCESS, "");
 
@@ -273,13 +292,13 @@ public class EconomyHandler implements Economy, NoBankEconomy, NoAccountNameEcon
 
             CompletableFuture.runAsync(() -> {
 
-                Profile targetProfile = new Profile(offlinePlayer.getUniqueId());
-                boolean exists = targetProfile.load().join();
+                Profile profile = new Profile(offlinePlayer.getUniqueId());
+                boolean exists = profile.load().join();
 
                 if (exists) {
 
-                    targetProfile.setMoney(targetProfile.getMoney() - money);
-                    targetProfile.update();
+                    profile.setMoney(profile.getMoney() - money);
+                    profile.update();
 
                 }
 
@@ -323,6 +342,15 @@ public class EconomyHandler implements Economy, NoBankEconomy, NoAccountNameEcon
 
                 if (exists) {
 
+                    Profile cached = new Profile(targetProfile.getUuid()).get();
+
+                    if(cached != null) {
+
+                        cached.setMoney(cached.getMoney() + money);
+                        return;
+
+                    }
+
                     targetProfile.setMoney(targetProfile.getMoney() + money);
                     targetProfile.update();
 
@@ -351,9 +379,10 @@ public class EconomyHandler implements Economy, NoBankEconomy, NoAccountNameEcon
             return new EconomyResponse(0, 0, EconomyResponse.ResponseType.FAILURE, "Je kan geen negatieve bedragen storten.");
         }
 
-        if (offlinePlayer.isOnline()) {
+        Profile targetProfile = new Profile(offlinePlayer.getUniqueId()).get();
 
-            Profile targetProfile = new Profile(offlinePlayer.getUniqueId()).get();
+        if (targetProfile != null) {
+
             targetProfile.setMoney(targetProfile.getMoney() + money);
             return new EconomyResponse(money, targetProfile.getMoney(), EconomyResponse.ResponseType.SUCCESS, "");
 
@@ -361,13 +390,13 @@ public class EconomyHandler implements Economy, NoBankEconomy, NoAccountNameEcon
 
             CompletableFuture.runAsync(() -> {
 
-                Profile targetProfile = new Profile(offlinePlayer.getUniqueId());
-                boolean exists = targetProfile.load().join();
+                Profile profile = new Profile(offlinePlayer.getUniqueId());
+                boolean exists = profile.load().join();
 
                 if (exists) {
 
-                    targetProfile.setMoney(targetProfile.getMoney() + money);
-                    targetProfile.update();
+                    profile.setMoney(profile.getMoney() + money);
+                    profile.update();
 
                 }
 

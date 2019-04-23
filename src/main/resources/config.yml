@@ -26,3 +26,7 @@ database:
   database: minetopiaeconomy
   username: admin
   password: password
+
+# Schakel dit in om alle data te synchroniseren met een andere BungeeCord server (met dezelfde plugin).
+# Dit kan alleen aangezet worden als het opslagtype MySQL is.
+plugin-messaging: false

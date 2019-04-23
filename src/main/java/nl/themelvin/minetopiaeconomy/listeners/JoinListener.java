@@ -1,5 +1,7 @@
 package nl.themelvin.minetopiaeconomy.listeners;
 
+import nl.themelvin.minetopiaeconomy.messaging.PluginMessaging;
+import nl.themelvin.minetopiaeconomy.messaging.outgoing.PlayerMessage;
 import nl.themelvin.minetopiaeconomy.models.Profile;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -23,6 +25,10 @@ public class JoinListener extends AbstractListener<PlayerJoinEvent> {
 
         Profile profile = new Profile(player.getUniqueId()).get();
         profile.setUsername(player.getName());
+
+        // Send plugin message to other servers.
+        PlayerMessage playerMessage = new PlayerMessage(player.getUniqueId(), true);
+        PluginMessaging.getInstance().send("playerAction", playerMessage);
 
         return completedFuture(null);
 

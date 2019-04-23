@@ -3,6 +3,8 @@ package nl.themelvin.minetopiaeconomy.models;
 import lombok.Getter;
 import lombok.Setter;
 import nl.themelvin.minetopiaeconomy.MinetopiaEconomy;
+import nl.themelvin.minetopiaeconomy.messaging.PluginMessaging;
+import nl.themelvin.minetopiaeconomy.messaging.outgoing.BalanceMessage;
 import nl.themelvin.minetopiaeconomy.storage.Queries;
 
 import java.sql.PreparedStatement;
@@ -25,7 +27,6 @@ public class Profile extends Model<Profile> {
     private String username;
 
     @Getter
-    @Setter
     private double money = 0D;
 
     public Profile(UUID uuid) {
@@ -45,6 +46,25 @@ public class Profile extends Model<Profile> {
     public void unCache() {
 
         MinetopiaEconomy.getOnlineProfiles().remove(this.uuid);
+
+    }
+
+    public void setMoney(double money) {
+
+        this.setMoney(money, true);
+
+    }
+
+    public void setMoney(double money, boolean message) {
+
+        this.money = money;
+
+        if(message && MinetopiaEconomy.configuration().getBoolean("plugin-messaging")) {
+
+            BalanceMessage balanceMessage = new BalanceMessage(this.uuid, this.money);
+            PluginMessaging.getInstance().send("balanceChange", balanceMessage);
+
+        }
 
     }
 

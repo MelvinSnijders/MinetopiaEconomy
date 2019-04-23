@@ -1,6 +1,9 @@
 package nl.themelvin.minetopiaeconomy.commands;
 
+import nl.themelvin.minetopiaeconomy.MinetopiaEconomy;
 import nl.themelvin.minetopiaeconomy.models.Model;
+import nl.themelvin.minetopiaeconomy.models.Profile;
+import nl.themelvin.minetopiaeconomy.storage.DataSaver;
 import nl.themelvin.minetopiaeconomy.storage.Queries;
 import nl.themelvin.minetopiaeconomy.utils.Message;
 import org.bukkit.command.CommandSender;
@@ -11,7 +14,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.NumberFormat;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 import static com.ea.async.Async.await;
@@ -37,6 +42,14 @@ public class BalancetopCommand extends AbstractCommand {
         this.sender.sendMessage(new Message("baltop-calculate").get());
 
         try {
+
+            HashMap<UUID, Profile> profiles = MinetopiaEconomy.getOnlineProfiles();
+
+            for(Profile profile : profiles.values()) {
+
+                await(profile.update());
+
+            }
 
             Statement statement = Model.hikari.getConnection().createStatement();
             CompletableFuture<ResultSet> resultFuture = CompletableFuture.supplyAsync(() -> {

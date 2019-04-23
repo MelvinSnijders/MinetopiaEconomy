@@ -62,6 +62,12 @@ public class MoneyCommand extends AbstractCommand {
             targetProfile = new Profile(targetString);
             await(targetProfile.load(targetString));
 
+            Profile cached = new Profile(targetProfile.getUuid()).get();
+
+            if(cached != null) {
+                targetProfile = cached;
+            }
+
         }
 
         String formattedMoney = NumberFormat.getNumberInstance(Locale.GERMAN).format(targetProfile.getMoney());
