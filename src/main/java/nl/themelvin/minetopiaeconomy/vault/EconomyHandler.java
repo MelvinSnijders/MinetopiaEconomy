@@ -177,7 +177,7 @@ public class EconomyHandler implements Economy, NoBankEconomy, NoAccountNameEcon
      * Checks if the player account has the amount - DO NOT USE NEGATIVE AMOUNTS.
      *
      * @param playerName Player to check.
-     * @param money Amount to check for.
+     * @param money      Amount to check for.
      * @return True if has amount, False else wise.
      */
 
@@ -192,7 +192,7 @@ public class EconomyHandler implements Economy, NoBankEconomy, NoAccountNameEcon
      * Checks if the player account has the amount - DO NOT USE NEGATIVE AMOUNTS.
      *
      * @param offlinePlayer Player to check.
-     * @param money Amount to check for.
+     * @param money         Amount to check for.
      * @return True if has amount, False else wise.
      */
 
@@ -207,14 +207,14 @@ public class EconomyHandler implements Economy, NoBankEconomy, NoAccountNameEcon
      * Withdraw an amount from a player - DO NOT USE NEGATIVE AMOUNTS.
      *
      * @param playerName Player to withdraw from.
-     * @param money Amount to withdraw.
+     * @param money      Amount to withdraw.
      * @return Detailed response of transaction.
      */
 
     @Override
     public EconomyResponse withdrawPlayer(String playerName, double money) {
 
-        if(money < 0) {
+        if (money < 0) {
             return new EconomyResponse(0, 0, EconomyResponse.ResponseType.FAILURE, "Je kan geen negatieve bedragen afnemen.");
         }
 
@@ -233,7 +233,7 @@ public class EconomyHandler implements Economy, NoBankEconomy, NoAccountNameEcon
                 Profile targetProfile = new Profile(playerName);
                 boolean exists = targetProfile.load(playerName).join();
 
-                if(exists) {
+                if (exists) {
 
                     targetProfile.setMoney(targetProfile.getMoney() - money);
                     targetProfile.update();
@@ -252,14 +252,14 @@ public class EconomyHandler implements Economy, NoBankEconomy, NoAccountNameEcon
      * Withdraw an amount from a player - DO NOT USE NEGATIVE AMOUNTS.
      *
      * @param offlinePlayer Player to withdraw from.
-     * @param money Amount to withdraw.
+     * @param money         Amount to withdraw.
      * @return Detailed response of transaction.
      */
 
     @Override
     public EconomyResponse withdrawPlayer(OfflinePlayer offlinePlayer, double money) {
 
-        if(money < 0) {
+        if (money < 0) {
             return new EconomyResponse(0, 0, EconomyResponse.ResponseType.FAILURE, "Je kan geen negatieve bedragen afnemen.");
         }
 
@@ -276,7 +276,7 @@ public class EconomyHandler implements Economy, NoBankEconomy, NoAccountNameEcon
                 Profile targetProfile = new Profile(offlinePlayer.getUniqueId());
                 boolean exists = targetProfile.load().join();
 
-                if(exists) {
+                if (exists) {
 
                     targetProfile.setMoney(targetProfile.getMoney() - money);
                     targetProfile.update();
@@ -295,14 +295,14 @@ public class EconomyHandler implements Economy, NoBankEconomy, NoAccountNameEcon
      * Deposit an amount to a player - DO NOT USE NEGATIVE AMOUNTS.
      *
      * @param playerName to deposit to.
-     * @param money Amount to deposit.
+     * @param money      Amount to deposit.
      * @return Detailed response of transaction.
      */
 
     @Override
     public EconomyResponse depositPlayer(String playerName, double money) {
 
-        if(money < 0) {
+        if (money < 0) {
             return new EconomyResponse(0, 0, EconomyResponse.ResponseType.FAILURE, "Je kan geen negatieve bedragen storten.");
         }
 
@@ -321,7 +321,7 @@ public class EconomyHandler implements Economy, NoBankEconomy, NoAccountNameEcon
                 Profile targetProfile = new Profile(playerName);
                 boolean exists = targetProfile.load(playerName).join();
 
-                if(exists) {
+                if (exists) {
 
                     targetProfile.setMoney(targetProfile.getMoney() + money);
                     targetProfile.update();
@@ -340,14 +340,14 @@ public class EconomyHandler implements Economy, NoBankEconomy, NoAccountNameEcon
      * Deposit an amount to a player - DO NOT USE NEGATIVE AMOUNTS.
      *
      * @param offlinePlayer to deposit to.
-     * @param money Amount to deposit.
+     * @param money         Amount to deposit.
      * @return Detailed response of transaction.
      */
 
     @Override
     public EconomyResponse depositPlayer(OfflinePlayer offlinePlayer, double money) {
 
-        if(money < 0) {
+        if (money < 0) {
             return new EconomyResponse(0, 0, EconomyResponse.ResponseType.FAILURE, "Je kan geen negatieve bedragen storten.");
         }
 
@@ -364,7 +364,7 @@ public class EconomyHandler implements Economy, NoBankEconomy, NoAccountNameEcon
                 Profile targetProfile = new Profile(offlinePlayer.getUniqueId());
                 boolean exists = targetProfile.load().join();
 
-                if(exists) {
+                if (exists) {
 
                     targetProfile.setMoney(targetProfile.getMoney() + money);
                     targetProfile.update();
