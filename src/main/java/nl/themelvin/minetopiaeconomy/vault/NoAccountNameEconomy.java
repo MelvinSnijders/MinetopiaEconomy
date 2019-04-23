@@ -2,6 +2,7 @@ package nl.themelvin.minetopiaeconomy.vault;
 
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
+import org.bukkit.OfflinePlayer;
 
 public interface NoAccountNameEconomy extends Economy {
 
@@ -33,6 +34,16 @@ public interface NoAccountNameEconomy extends Economy {
     @Override
     default boolean createPlayerAccount(String playerName, String accountName) {
         return createPlayerAccount(playerName);
+    }
+
+    @Override
+    default boolean createPlayerAccount(String playerName) {
+        return true;
+    }
+
+    @Override
+    default boolean createPlayerAccount(OfflinePlayer offlinePlayer) {
+        return true;
     }
 
 }
