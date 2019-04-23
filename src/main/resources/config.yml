@@ -1,0 +1,32 @@
+#---------------------------------------------------------------------------------------------#
+#    __  __ _            _              _       ______                                        #
+#   |  \/  (_)          | |            (_)     |  ____|                                       #
+#   | \  / |_ _ __   ___| |_ ___  _ __  _  __ _| |__   ___ ___  _ __   ___  _ __ ___  _   _   #
+#   | |\/| | | '_ \ / _ \ __/ _ \| '_ \| |/ _` |  __| / __/ _ \| '_ \ / _ \| '_ ` _ \| | | |  #
+#   | |  | | | | | |  __/ || (_) | |_) | | (_| | |___| (_| (_) | | | | (_) | | | | | | |_| |  #
+#   |_|  |_|_|_| |_|\___|\__\___/| .__/|_|\__,_|______\___\___/|_| |_|\___/|_| |_| |_|\__, |  #
+#                                | |                                                   __/ |  #
+#                                |_|                                                  |___/   #
+#                                                                                             #
+#       De gratis Economy plugin voor jouw Minetopia server - Gemaakt door TheMelvinNL        #
+#                                                                                             #
+#---------------------------------------------------------------------------------------------#
+
+# Welkom in het configuratiebestand van MinetopiaEconomy
+# Bij elke config optie staat een kleine uitleg om het wat makkelijker te maken
+# Deze plugin is helemaal gratis, wil je toch wat voor me doen? Doneer via https://paypal.me/melvinsnijders
+
+# Het type opslag dat je wilt gebruiken, kies uit 'sqlite' of 'mysql'. Weet je niet wat dit is? Laat het zo staan!
+storage: sqlite
+
+# De gegevens van je database, enkel nodig als je bij de vorige optie 'mysql' hebt ingevuld. Kies de juiste database, deze wordt niet aangemaakt!
+database:
+  host: 127.0.0.1
+  port: 3306
+  database: minetopiaeconomy
+  username: admin
+  password: password
+
+# Schakel dit in om alle data te synchroniseren met een andere BungeeCord server (met dezelfde plugin).
+# Dit kan alleen aangezet worden als het opslagtype MySQL is.
+plugin-messaging: false

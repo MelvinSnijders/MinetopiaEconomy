@@ -1,0 +1,12 @@
+name: MinetopiaEconomy
+author: TheMelvinNL
+version: 2.0.0
+main: nl.themelvin.minetopiaeconomy.MinetopiaEconomy
+softdepend: [Vault]
+commands:
+  money:
+    aliases: [geld, €]
+  balancetop:
+    aliases: [baltop, moneytop, geldtop]
+  economy:
+    aliases: [eco, economie]

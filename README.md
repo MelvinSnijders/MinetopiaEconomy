@@ -1,26 +1,31 @@
 ![MinetopiaEconomy](https://img.themelvin.nl/8kffg.png)
 
-## Dependencies
-Deze plugin heeft maar 1 dependency, dat is Vault! Dit is GEEN Minetopia plugin, een aanrader voor een Minetopia plugin is MinetopiaSDB, je hebt geen Essentials nodig als je deze plugin gebruikt. (Dit staat wel op de pagina van SDB).
+## Over
+MinetopiaEconomy is de oplossing voor een op SQL gebaseerde economy plugin. MinetopiaEconomy is gebouwd voor Minetopia servers die niet altijd gebruik willen maken van de economy in Essentials of die hun economy over verschillende servers (bungee) willen laten werken.
+
+__Features__:
+* MySQL / SQLite opslag.
+* Data wordt live gecached over (eventueel) verschillende Bungee servers.
+* Alle database gerelateerde actie's zijn Async (met CompletableFuture).
+* Bevat alle commands die nodig zijn om de economie te beheren.
+* Oude data van *Essentials* wordt automatisch hersteld.
+
+## Download
+De laatste versie  van MinetopiaEconomy is beschikbaar op [Spigot](https://www.spigotmc.org/resources/minetopiaeconomy.53610/)
 
 ## Installatie
-De installatie is erg simpel, volg het stappenplan en het is zo klaar!
-1. Stop je server
-2. Check of je Vault in je server hebt.
-3. Doe het .jar bestand in je server (MinetopiaEconomy.jar)
-4. Start je server
-5. Ga naar de config, te vinden in plugins/MinetopiaEconomy/config.yml
-6. Hier kan je alles configureren, data opslag staat automatisch op FILE
-7. Herstart je server en geniet van de plugin!​
-
-## Wat maakt deze plugin uniek?
-Deze plugin maakt gebruik van meerdere manieren om lag te verminderen, een groot probleem van veel Minetopia servers. Door pas data op te slaan en in te laden als een speler joint / left is er erg weinig lag. Ook willen sommige servers van de plugin Essentials af, omdat deze soms niet professioneel overkomt. Ook slaat deze plugin zijn data op in MySQL (dit kan je zelf kiezen), een zeer efficiënte manier van data opslaan. Je kan alle berichten in de plugin aanpassen naar eigen wens.
+1. Download de source code of gebruik `git clone https://github.com/TheMelvinNL/MinetopiaEconomy`
+2. Installeer [Gradle](https://gradle.org/).
+3. Voer `gradle build` uit.
+4. De jar staat nu in `\build\libs`.
 
 ## Doneer
 Doneren kan via de volgende link: https://paypal.me/melvinsnijders
 
-## Comitten
-Ben jij een Developer en heb je een bug gevonden, of misschien een nieuwe feature en wil je die in MinetopiaEconomy laten plaatsen? Fork de repository en doe een commit naar de `development` branch, alle commits naar `master` worden genegeerd! Ik kijk naar wat je hebt gemaakt / bedacht en zal dan mergen.
+## Contributie
+* Nieuwe features en bug fixes moeten gemaakt en getest worden in een nieuwe branch.
+* Deze branches moeten altijd gemerged worden met development.
+* Commits moeten gebruik maken van [GitMoji](https://gitmoji.carloscuesta.me/).
 
 ## License
 MIT License
