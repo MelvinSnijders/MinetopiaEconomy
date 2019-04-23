@@ -3,7 +3,7 @@
 ## Over
 MinetopiaEconomy is de oplossing voor een op SQL gebaseerde economy plugin. MinetopiaEconomy is gebouwd voor Minetopia servers die niet altijd gebruik willen maken van de economy in Essentials of die hun economy over verschillende servers (bungee) willen laten werken.
 
-##### Features
+__Features__:
 * MySQL / SQLite opslag.
 * Data wordt live gecached over (eventueel) verschillende Bungee servers.
 * Alle database gerelateerde actie's zijn Async (met CompletableFuture).
