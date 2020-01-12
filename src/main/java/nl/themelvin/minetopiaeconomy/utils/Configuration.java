@@ -34,6 +34,7 @@ public class Configuration extends YamlConfiguration {
                 byte[] buffer = new byte[stream.available()];
                 stream.read(buffer);
 
+                this.file.getParentFile().mkdirs();
                 this.file.createNewFile();
 
                 OutputStream outStream = new FileOutputStream(this.file);
