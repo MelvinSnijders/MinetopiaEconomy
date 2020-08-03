@@ -1,10 +1,10 @@
 plugins {
     id 'java'
-    id "net.ltgt.apt" version "0.21"
+    id 'com.github.johnrengelman.shadow' version '6.0.0'
 }
 
-group 'nl.themelvin'
-version '2.0.1-SNAPSHOT'
+group 'nl.melvinsnijders'
+version '3.0.0-SNAPSHOT'
 
 sourceCompatibility = 1.8
 compileJava.options.encoding = "UTF-8"
@@ -29,46 +29,28 @@ repositories {
 
 }
 
-configurations {
-    shade
-}
-
 dependencies {
 
     // Normal dependencies
-    compile group: 'org.projectlombok', name: 'lombok', version: '1.18.6'
-    compile group: 'org.spigotmc', name: 'spigot', version: '1.9.4-R0.1-SNAPSHOT'
-    compile group: 'net.milkbowl.vault', name: 'VaultAPI', version: '1.7'
-    compile group: 'com.zaxxer', name: 'HikariCP', version: '3.3.1'
-    compile group: 'com.ea.async', name: 'ea-async', version: '1.2.2'
-    compile 'com.google.code.gson:gson:2.8.5'
-    
-    // Dependencies that should be shaded in the plugin.
-    shade (group: 'com.zaxxer', name: 'HikariCP', version: '3.3.1') {
-        exclude group: 'org.slf4j', module: 'slf4j-api'
-    }
-    shade group: 'org.slf4j', name: 'slf4j-nop', version: '1.7.25'
+    compileOnly group: 'org.projectlombok', name: 'lombok', version: '1.18.6'
+    compileOnly group: 'org.spigotmc', name: 'spigot', version: '1.9.4-R0.1-SNAPSHOT'
+    compileOnly group: 'net.milkbowl.vault', name: 'VaultAPI', version: '1.7'
+    compile 'com.github.jasync-sql:jasync-mysql:1.1.3'
+    compile 'com.google.code.gson:gson:2.8.0'
 
     // Annotation processor
     annotationProcessor group: 'org.projectlombok', name: 'lombok', version: '1.18.6'
 
 }
 
-task instrument(type: JavaExec) {
-    main = 'com.ea.async.instrumentation.Main'
-    classpath = sourceSets.main.compileClasspath
-    args "$buildDir"
-}
+task devDeploy(type: Copy) {
 
-compileJava.doLast {
-    tasks.instrument.execute()
-}
+    dependsOn shadowJar
 
-
-jar {
-    from {
-        configurations.shade.collect { it.isDirectory() ? it : zipTree(it) }
-    } {
-        exclude "plugin.yml"
+    if(project.hasProperty('devDeployDir')) {
+        from "$buildDir/libs"
+        include "*-all.jar"
+        into file(devDeployDir)
     }
+
 }

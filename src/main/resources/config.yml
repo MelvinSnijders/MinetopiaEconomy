@@ -16,16 +16,22 @@
 # Bij elke config optie staat een kleine uitleg om het wat makkelijker te maken
 # Deze plugin is helemaal gratis, wil je toch wat voor me doen? Doneer via https://paypal.me/melvinsnijders
 
-# Het type opslag dat je wilt gebruiken, kies uit 'sqlite' of 'mysql'. Weet je niet wat dit is? Laat het zo staan!
-storage: sqlite
+# Het type opslag dat je wilt gebruiken, kies uit 'JSON' of 'MYSQL'. Weet je niet wat dit is? Laat het zo staan!
+# Kies MySQL als je data wilt synchroniseren met andere servers, JSON slaat losse bestanden op.
+storage: JSON
 
-# De gegevens van je database, enkel nodig als je bij de vorige optie 'mysql' hebt ingevuld. Kies de juiste database, deze wordt niet aangemaakt!
-database:
-  host: 127.0.0.1
+mysql:
+  host: localhost
   port: 3306
   database: minetopiaeconomy
-  username: admin
+  username: root
   password: password
+
+# Kies of je oude data van andere plugins automatisch wilt migreren naar MinetopiaEconomy.
+# Bij een join zal de data ingeladen worden.
+# Kies uit: NONE, ESSENTIALS
+# Waarschuwing! Dit wordt enkel gedaan bij NIEUWE profielen.
+data-migration: NONE
 
 # Schakel dit in om alle data te synchroniseren met een andere BungeeCord server (met dezelfde plugin).
 # Dit kan alleen aangezet worden als het opslagtype MySQL is.
