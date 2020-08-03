@@ -4,7 +4,7 @@
 MinetopiaEconomy is de oplossing voor een op SQL gebaseerde economy plugin. MinetopiaEconomy is gebouwd voor Minetopia servers die niet altijd gebruik willen maken van de economy in Essentials of die hun economy over verschillende servers (bungee) willen laten werken.
 
 __Features__:
-* MySQL / SQLite opslag.
+* MySQL / JSON opslag.
 * Data wordt live gecached over (eventueel) verschillende Bungee servers.
 * Alle database gerelateerde actie's zijn Async (met CompletableFuture).
 * Bevat alle commands die nodig zijn om de economie te beheren.
@@ -16,7 +16,7 @@ De laatste versie  van MinetopiaEconomy is beschikbaar op [Spigot](https://www.s
 ## Installatie
 1. Download de source code of gebruik `git clone https://github.com/TheMelvinNL/MinetopiaEconomy`
 2. Installeer [Gradle](https://gradle.org/).
-3. Voer `gradle build` uit.
+3. Voer `gradle shadowJar` uit.
 4. De jar staat nu in `\build\libs`.
 
 ## Doneer
@@ -30,7 +30,7 @@ Doneren kan via de volgende link: https://paypal.me/melvinsnijders
 ## License
 MIT License
 
-Copyright (c) 2018 Melvin Snijders and Contributors
+Copyright (c) 2020 Melvin Snijders and Contributors
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
