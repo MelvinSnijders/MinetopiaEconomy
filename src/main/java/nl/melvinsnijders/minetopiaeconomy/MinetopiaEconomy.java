@@ -3,6 +3,7 @@ package nl.melvinsnijders.minetopiaeconomy;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import net.milkbowl.vault.economy.Economy;
+import nl.melvinsnijders.minetopiaeconomy.commands.MoneyCommand;
 import nl.melvinsnijders.minetopiaeconomy.data.IStorage;
 import nl.melvinsnijders.minetopiaeconomy.data.StorageType;
 import nl.melvinsnijders.minetopiaeconomy.data.migration.MigrationType;
@@ -13,9 +14,17 @@ import nl.melvinsnijders.minetopiaeconomy.listeners.PlayerQuitListener;
 import nl.melvinsnijders.minetopiaeconomy.profile.Profile;
 import nl.melvinsnijders.minetopiaeconomy.utils.Cache;
 import nl.melvinsnijders.minetopiaeconomy.utils.Logger;
+import nl.melvinsnijders.minetopiaeconomy.utils.Messages;
+import nl.melvinsnijders.minetopiaeconomy.utils.Statistics;
 import nl.melvinsnijders.minetopiaeconomy.vault.EconomyHandler;
 import org.bukkit.Bukkit;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.Configuration;
+import org.bukkit.entity.Player;
+import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -28,6 +37,9 @@ public class MinetopiaEconomy extends JavaPlugin {
     @Getter private IStorage dataStorage;
     @Getter private Cache<UUID, Profile> profileCache;
     @Getter private MigrationType migrationType;
+    private Statistics statistics;
+
+    private Map<String, Class<? extends nl.melvinsnijders.minetopiaeconomy.commands.Command>> commands = new HashMap<>();
 
     @Override
     @SneakyThrows
@@ -92,10 +104,25 @@ public class MinetopiaEconomy extends JavaPlugin {
             Bukkit.getServicesManager().register(Economy.class, new EconomyHandler(), this, ServicePriority.Highest);
         }
 
+        // Initiate messages
+        Messages.setPlugin(this);
+        Messages.init();
+
         // Register listeners
         this.registerListener(AsyncPlayerJoinListener.class);
         this.registerListener(PlayerJoinListener.class);
         this.registerListener(PlayerQuitListener.class);
+
+        // Register commands
+        this.registerCommand("money", MoneyCommand.class);
+
+        // Reload data (fake join) for online players, because people are still reloading servers in production...
+        for(Player online : Bukkit.getOnlinePlayers()) {
+            new AsyncPlayerJoinListener(this).execute(new AsyncPlayerPreLoginEvent(null, null, online.getUniqueId()));
+        }
+
+        // Setup statistics
+        this.statistics = new Statistics(this);
 
         // Startup success.
         Logger.log(Logger.Severity.INFO, "Plugin is opgestart, bedankt voor het gebruiken!");
@@ -104,6 +131,12 @@ public class MinetopiaEconomy extends JavaPlugin {
 
     @Override
     public void onDisable() {
+
+        this.statistics.shutdown();
+
+        for(Player online : Bukkit.getOnlinePlayers()) {
+            new PlayerQuitListener(this).execute(new PlayerQuitEvent(online, null));
+        }
 
         this.dataStorage.close();
         this.profileCache.clear();
@@ -128,6 +161,54 @@ public class MinetopiaEconomy extends JavaPlugin {
         } catch (Exception e) {
 
             e.printStackTrace();
+
+        }
+
+    }
+
+    @Override
+    public boolean onCommand(CommandSender sender, Command command, String alias, String[] args) {
+
+        if (!this.commands.containsKey(alias)) {
+
+            return false;
+
+        }
+
+        try {
+
+            Class<?> clazz = this.commands.get(alias);
+            Constructor<?> constructor = clazz.getConstructor(MinetopiaEconomy.class, CommandSender.class, String.class, String[].class);
+            nl.melvinsnijders.minetopiaeconomy.commands.Command object = (nl.melvinsnijders.minetopiaeconomy.commands.Command) constructor.newInstance(this, sender, alias, args);
+            object.execute();
+
+        } catch (Exception e) {
+
+            e.printStackTrace();
+
+        }
+
+        return false;
+
+    }
+
+    /**
+     * Register command to command register.
+     *
+     * @param command Alias of the command
+     * @param clazz   Cclass instance of the executor
+     */
+
+    private void registerCommand(String command, Class<? extends nl.melvinsnijders.minetopiaeconomy.commands.Command> clazz) {
+
+        this.getCommand(command).setExecutor(this);
+        this.commands.put(command, clazz);
+
+        List<String> aliases = this.getCommand(command).getAliases();
+
+        for (String alias : aliases) {
+
+            this.commands.put(alias, clazz);
 
         }
 
